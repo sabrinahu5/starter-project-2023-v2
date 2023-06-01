@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/** @type {import("eslint").Linter.Config} */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require("path");
 
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true, // Ignores config files in parent directories
   overrides: [
