@@ -37,10 +37,7 @@
     --radius: 0.5rem;
   }
 
-<<<<<<< HEAD
   /* Necessary to include data-theme="dark" because of next-theme functionality https://github.com/pacocoursey/next-themes */
-=======
->>>>>>> 0be7a0ebf26cc2e5a501d5ab52a06ffccf1eeeb9
   .dark,
   [data-theme="dark"] {
     --background: 224 71% 4%;
