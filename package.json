@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "types": "source .env && supabase gen types typescript --db-url $SUPABASE_CONNECTION_STRING > ./lib/schema.ts && prettier lib/schema.ts --write"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.3",

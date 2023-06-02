@@ -15,6 +15,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Create supabase server component client and obtain user session from stored cookie
   const supabase = createServerComponentClient<Database>({ cookies });
   const {
     data: { session },
@@ -35,6 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 </div>
               </div>
             </div>
+            {/* Conditionally display website if logged in, else display login form */}
             <div className="flex-1 space-y-4 p-8 pt-6">{session ? children : <Login />}</div>
           </div>
         </Providers>

@@ -9,10 +9,11 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Login() {
-  const supabaseClient = useSupabaseClient<Database>();
+  // Obtain session from context provider
   const router = useRouter();
   const { session } = useSessionContext();
 
+  // Refresh route on session status (login) change
   useEffect(() => {
     if (session) {
       router.refresh();
@@ -20,6 +21,10 @@ export default function Login() {
   }, [session, router]);
 
   const { theme } = useTheme();
+
+  // Obtain supabase client from context provider and pass to imported Auth UI
+  const supabaseClient = useSupabaseClient<Database>();
+
   return (
     <Auth
       supabaseClient={supabaseClient}
