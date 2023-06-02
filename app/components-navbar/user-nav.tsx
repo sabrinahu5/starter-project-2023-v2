@@ -16,7 +16,6 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import "./globals.css";
 
 export default function UserNav() {
   const supabaseClient = useSupabaseClient<Database>();
@@ -42,7 +41,7 @@ export default function UserNav() {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>{user.email?.slice(0, 2)}</AvatarFallback>
+            <AvatarFallback>{user.email?.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

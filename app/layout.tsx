@@ -1,12 +1,13 @@
-import { ModeToggle } from "@/app/mode-toggle";
+import { ModeToggle } from "@/app/components-navbar/mode-toggle";
 import { type Database } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import UserNav from "./components-navbar/user-nav";
+import "./globals.css";
 import Login from "./login";
 import { Providers } from "./providers";
-import UserNav from "./user-nav";
 
 export const metadata = {
   title: "T4SG Starter Project",
