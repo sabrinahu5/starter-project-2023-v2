@@ -54,7 +54,7 @@ The project uses Next.js, a React-based framework with significant optimizations
 `cd` into a desired destination folder, then clone the repo (preferably using SSH):
 
 ```shell
-git clone git@github.com:hcs-t4sg/starter-project-2023-core.git
+git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 ```
 
 #### Package installation
@@ -63,7 +63,7 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-core.git
 
    ```bash
    # Navigate into the project directory
-   cd starter-project-2023-core.git
+   cd starter-project-2023-v2.git
 
    # Open in VSCode
    code .
