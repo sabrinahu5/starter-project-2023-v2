@@ -32,7 +32,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <MainNav className="mx-6" />
                 <div className="ml-auto flex items-center space-x-4">
                   <ModeToggle />
-                  <UserNav />
+                  <UserNav session={session} />
                 </div>
               </div>
             </div>
