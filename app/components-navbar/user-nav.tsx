@@ -12,13 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { type Database } from "@/lib/schema";
-import { useSupabaseClient, type Session } from "@supabase/auth-helpers-react";
+import { createClientComponentClient, type Session } from "@supabase/auth-helpers-nextjs";
 import { LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function UserNav({ session }: { session: Session | null }) {
-  const supabaseClient = useSupabaseClient<Database>();
+  const supabaseClient = createClientComponentClient<Database>();
   // const user = useUser();
 
   const router = useRouter();

@@ -1,39 +1,37 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { type Database } from "@/lib/schema";
-import { useSessionContext, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { useTheme } from "next-themes";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Login() {
   // Obtain session from context provider
   const router = useRouter();
-  const { session } = useSessionContext();
-
-  // Refresh route on session status (login) change
-  useEffect(() => {
-    if (session) {
-      router.refresh();
-    }
-  }, [session, router]);
-
-  const { theme } = useTheme();
 
   // Obtain supabase client from context provider and pass to imported Auth UI
-  const supabaseClient = useSupabaseClient<Database>();
+  const supabaseClient = createClientComponentClient<Database>();
+
+  const handleEmailLogin = async () => {
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email: "isolationphoenix@gmail.com",
+      password: "M03132001",
+    });
+
+    if (error) {
+      console.log({ error });
+    }
+
+    router.refresh();
+  };
 
   return (
-    <Auth
-      supabaseClient={supabaseClient}
-      appearance={{
-        theme: ThemeSupa,
+    <Button
+      onClick={() => {
+        void handleEmailLogin();
       }}
-      providers={[]}
-      socialLayout="horizontal"
-      theme={theme === "light" ? "default" : "dark"}
-    />
+    >
+      Log In
+    </Button>
   );
 }
