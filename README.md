@@ -390,6 +390,10 @@ There's no one-size-fits-all solution to web development. This project is meant 
 - [tRPC](https://trpc.io): Allows us to build and consume typesafe APIs from our Next.js backend (API routes) without schemas or code generation
 - [Prisma](https://www.prisma.io): A Typescript ORM ([object-relational mapping](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)) that allows you to query and manage your database in a typesafe manner
 
+### Testing frameworks
+
+You [may not](https://www.youtube.com/watch?v=ZGKGb109-I4) need to write tests for your project, but if you do, check out [Cypress](https://www.cypress.io)! It's a great end-to-end testing framework that is visual and easy to work with.
+
 ### Databases
 
 Here is a great [guide](https://www.youtube.com/watch?v=cC6HFd1zcbo) on picking databases.
