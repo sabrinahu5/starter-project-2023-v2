@@ -72,13 +72,9 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
    # https://www.freecodecamp.org/news/how-to-open-visual-studio-code-from-your-terminal/#:~:text=Once%20your%20terminal%20is%20open,Then%20hit%20enter%20.&text=Once%20you%20hit%20enter%20%2C%20VS%20Code%20will%20now%20open.
    ```
 
-2. You should see a popup in the bottom right prompting you to install recommended extensions. Please install these, they'll be helpful for code formatting and developing the webapp. You can also view the recommended extensions in the extensions sidebar (`cmd + shift + X`.)
+2. Open a terminal in the project folder by dragging up from the bottom of the code window or by going to `Terminal > New Terminal` in the menu bar.
 
-3. You will also get a prompt to use the workspace's Typescript version; accept it. If you don't get one, make sure you're using the workspace's Typescript version by pressing `cmd` + `shift` + `P` and typing "typescript", selecting `Typescript: Select Typescript Version`, and selecting `Use Workspace Version`.
-
-4. Open a terminal in the project folder by dragging up from the bottom of the code window or by going to `Terminal > New Terminal` in the menu bar.
-
-5. Run: `npm install` (`npm i` for short)
+3. Run: `npm install` (`npm i` for short)
 
    - If you get something like "command not found", you might not have `npm` installed.
 
@@ -92,6 +88,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   found 0 vulnerabilities
   ```
+
+4. You should see a popup in the bottom right prompting you to install recommended extensions. Please install these, they'll be helpful for code formatting and developing the webapp. You can also view the recommended extensions in the extensions sidebar (`cmd + shift + X`.)
+
+5. You will also get a prompt to use the workspace's Typescript version; accept it. If you don't get one, or if you get an error that the path "does not point to a valid tsserver install", make sure you're using the workspace's Typescript version by pressing `cmd` + `shift` + `P` and typing "typescript", selecting `Typescript: Select Typescript Version`, and selecting `Use Workspace Version`.
 
 #### Supabase Connection Setup
 
