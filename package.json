@@ -8,7 +8,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky install",
     "types": "source .env && supabase gen types typescript --db-url $SECRET_SUPABASE_CONNECTION_STRING > ./lib/schema.ts && prettier lib/schema.ts --write"
   },
   "dependencies": {
@@ -33,7 +32,6 @@
   },
   "devDependencies": {
     "@types/eslint": "^8.40.0",
-    "@types/lint-staged": "^13.2.0",
     "@types/node": "^20.2.5",
     "@types/prettier": "^2.7.3",
     "@types/react": "^18.2.7",
@@ -44,9 +42,6 @@
     "eslint": "^8.41.0",
     "eslint-config-next": "^13.4.4",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
     "prettier-plugin-organize-imports": "^3.2.2",
