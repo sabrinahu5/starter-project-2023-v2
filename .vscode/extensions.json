@@ -5,6 +5,7 @@
     "aaron-bond.better-comments",
     "esbenp.prettier-vscode",
     "editorconfig.editorconfig",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "rohit-gohri.format-code-action"
   ]
 }

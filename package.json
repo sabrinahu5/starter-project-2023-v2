@@ -8,6 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "npx prettier src test --check",
+    "prettier:fix": "npm run prettier -- --write",
+    "format": "npm run prettier:fix && npm run lint:fix",
     "types": "source .env && supabase gen types typescript --db-url $SECRET_SUPABASE_CONNECTION_STRING > ./lib/schema.ts && prettier lib/schema.ts --write"
   },
   "dependencies": {

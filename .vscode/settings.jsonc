@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": false, // Disable in favor of codeActionsOnSave to run prettier before eslint consistently. https://blog.logrocket.com/using-prettier-eslint-automate-formatting-fixing-javascript/#:~:text=So%2C%20if%20you%20want%20to,them%20in%20the%20next%20section.
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.formatDocument": true,
+    "source.fixAll.eslint": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}
