@@ -1,6 +1,8 @@
 import { TypographyH2, TypographyP } from "@/components/ui/typography";
 
 export default function Home() {
+  console.log("yeet");
+
   return (
     <main>
       <TypographyH2>Welcome to the T4SG starter project!</TypographyH2>
