@@ -13,15 +13,10 @@ export default function Login() {
   const supabaseClient = createClientComponentClient<Database>();
 
   const handleEmailLogin = async () => {
-    const { error } = await supabaseClient.auth.signInWithPassword({
+    await supabaseClient.auth.signInWithPassword({
       email: "abcde@gmail.com",
       password: "12345",
     });
-
-    if (error) {
-      console.log({ error });
-    }
-
     router.refresh();
   };
 

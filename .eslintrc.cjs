@@ -27,13 +27,13 @@ module.exports = {
   rules: {
     "@typescript-eslint/consistent-type-imports": [
       // https://typescript-eslint.io/rules/consistent-type-imports/
-      "warn", // https://eslint.org/docs/latest/use/configure/rules
+      "error", // https://eslint.org/docs/latest/use/configure/rules
       {
         prefer: "type-imports",
         fixStyle: "inline-type-imports",
       },
     ],
     "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }], // https://typescript-eslint.io/rules/no-unused-vars/
-    "no-console": "warn",
+    "no-console": "error",
   },
 };

@@ -24,10 +24,7 @@ export default function UserNav({ session }: { session: Session | null }) {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) {
-      console.error(error);
-    }
+    await supabaseClient.auth.signOut();
     router.refresh();
   };
 
