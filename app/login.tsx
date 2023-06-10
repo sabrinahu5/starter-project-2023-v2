@@ -24,15 +24,26 @@ export default function Login() {
     router.refresh();
   };
 
+  const [email, setEmail] = useState("");
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     setIsLoading(true);
+    console.log(location.origin);
+    const { data, error } = await supabaseClient.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
+    });
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    console.log(data);
+    console.log(error);
+
+    setIsLoading(false);
+    router.refresh();
   };
 
   return (
@@ -56,6 +67,7 @@ export default function Login() {
                 autoComplete="email"
                 autoCorrect="off"
                 disabled={isLoading}
+                onChange={(event) => setEmail(event.target.value)}
               />
             </div>
             <Button disabled={isLoading}>
