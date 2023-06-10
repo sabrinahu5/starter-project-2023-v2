@@ -1,12 +1,12 @@
-import { ModeToggle } from "@/app/components-navbar/mode-toggle";
+import { ModeToggle } from "@/app/(navbar-components)/mode-toggle";
 import { type Database } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import UserNav from "./components-navbar/user-nav";
+import LoginPage from "./(login-components)/login-page";
+import UserNav from "./(navbar-components)/user-nav";
 import "./globals.css";
-import Login from "./login";
 import { Providers } from "./providers";
 
 export const metadata = {
@@ -36,8 +36,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 </div>
               </div>
             </div>
-            {/* Conditionally display website if logged in, else display login form */}
-            <div className="flex-1 space-y-4 p-8 pt-6">{session ? children : <Login />}</div>
+            {/* Conditionally display website if logged in, else display login page */}
+            <div className="flex-1 space-y-4 p-8 pt-6">{session ? children : <LoginPage />}</div>
           </div>
         </Providers>
       </body>
