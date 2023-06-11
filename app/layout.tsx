@@ -1,4 +1,5 @@
 import { ModeToggle } from "@/app/(navbar-components)/mode-toggle";
+import { Toaster } from "@/components/ui/toaster";
 import { type Database } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -40,6 +41,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <div className="flex-1 space-y-4 p-8 pt-6">{session ? children : <LoginPage />}</div>
           </div>
         </Providers>
+        <Toaster />
       </body>
     </html>
   );

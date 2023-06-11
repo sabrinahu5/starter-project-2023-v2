@@ -4,44 +4,65 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
 import { type Database } from "@/lib/schema";
 import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, type BaseSyntheticEvent } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const userAuthSchema = z.object({
+  email: z.string().email(),
+});
+
+type FormData = z.infer<typeof userAuthSchema>;
 
 export function UserAuthForm({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  // Obtain session from context provider
-  const router = useRouter();
-
-  // Obtain supabase client from context provider and pass to imported Auth UI
-  const supabaseClient = createClientComponentClient<Database>();
-
-  const [email, setEmail] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(userAuthSchema),
+  });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const onSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
+  // Obtain supabase client from context provider
+  const supabaseClient = createClientComponentClient<Database>();
+
+  const onSubmit = async (input: FormData) => {
     setIsLoading(true);
-    console.log(location.origin);
-    const { data, error } = await supabaseClient.auth.signInWithOtp({
-      email,
+
+    // Supabase magic link sign-in
+    const { error } = await supabaseClient.auth.signInWithOtp({
+      email: input.email.toLowerCase(),
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
 
-    console.log(data);
-    console.log(error);
-
     setIsLoading(false);
-    router.refresh();
+
+    if (error) {
+      return toast({
+        title: "Something went wrong.",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+
+    return toast({
+      title: "Check your email",
+      description: "We sent you a login link. Be sure to check your spam too.",
+    });
   };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={(event: React.SyntheticEvent) => void onSubmit(event)}>
+      <form onSubmit={(e: BaseSyntheticEvent) => void handleSubmit(onSubmit)(e)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -55,8 +76,9 @@ export function UserAuthForm({ className, ...props }: React.HTMLAttributes<HTMLD
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading}
-              onChange={(event) => setEmail(event.target.value)}
+              {...register("email")}
             />
+            {errors?.email && <p className="px-1 text-xs text-red-600">{errors.email.message}</p>}
           </div>
           <Button disabled={isLoading}>
             {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
