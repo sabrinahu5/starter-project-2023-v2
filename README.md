@@ -22,17 +22,19 @@
       - [`eslint`](#eslint)
       - [`prettier`](#prettier)
       - [EditorConfig](#editorconfig)
-      - [`husky` and `lint-staged`](#husky-and-lint-staged)
+      - [Github CI workflow](#github-ci-workflow)
       - [VSCode-specific settings](#vscode-specific-settings)
     - [VSCode Extensions](#vscode-extensions)
-      - [`eslint`, `prettier`, `editorconfig`, and `prisma`](#eslint-prettier-editorconfig-and-prisma)
+      - [`eslint`, `prettier`, `editorconfig`, and `tailwindcss`](#eslint-prettier-editorconfig-and-tailwindcss)
       - [BetterComments](#bettercomments)
       - [Live Share](#live-share)
+      - [Format Code Action](#format-code-action)
   - [Deployment guides](#deployment-guides)
   - [Additional stack options (for SSWEs)](#additional-stack-options-for-sswes)
     - [Component libraries](#component-libraries)
     - [User Auth](#user-auth)
     - [Data fetching and other backend tools](#data-fetching-and-other-backend-tools)
+    - [Testing frameworks](#testing-frameworks)
     - [Databases](#databases)
     - [Realtime options](#realtime-options)
     - [The T3 Stack](#the-t3-stack)
@@ -82,10 +84,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   ```bash
   added 414 packages, and audited 415 packages in 13s
-  
+
   149 packages are looking for funding
   run `npm fund` for details
-  
+
   found 0 vulnerabilities
   ```
 
@@ -171,7 +173,7 @@ Typescript applies type inference to your files automatically, but you can also 
 npx tsc --noEmit
 ```
 
-A quick tip on coding with Typescript: When fixing type errors, you should avoid using [type assertions](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule) (with `as`) and the [`any` type](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule) **as much as possible**. These functionalities are escape hatches built into Typescript to allow you to avoid type-checking, but they don't actually solve the underlying problem of a type error! Simply ignoring the problem by avoiding type-checking will only make future bugs much more difficult to fix. Personally, out of all the type errors I've resolved in Typescript, I've only had one situation where the `as` keyword was necessary; every other time, the type error exposed an important error/oversight in my code. 
+A quick tip on coding with Typescript: When fixing type errors, you should avoid using [type assertions](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule) (with `as`) and the [`any` type](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule) **as much as possible**. These functionalities are escape hatches built into Typescript to allow you to avoid type-checking, but they don't actually solve the underlying problem of a type error! Simply ignoring the problem by avoiding type-checking will only make future bugs much more difficult to fix. Personally, out of all the type errors I've resolved in Typescript, I've only had one situation where the `as` keyword was necessary; every other time, the type error exposed an important error/oversight in my code.
 
 Finally, note that type definitions for many `npm` packages are [maintained by the Typescript community](https://github.com/DefinitelyTyped/DefinitelyTyped) and may be found with the `@types/` prefix on [`npm`](https://www.npmjs.com), if they're not already included in the package itself (generally they are). Several of the config files in the project (ex: `.prettierrc.cjs`) manually import type definitions, but you generally will not need to worry about such syntax in your actual source code.
 
@@ -349,7 +351,7 @@ Standardizes some settings (only in the project workspace) across different edit
 
 #### Github CI workflow
 
-We implemented a [Github Actions](https://docs.github.com/en/actions) workflow for CI ([continuous integration](https://www.atlassian.com/continuous-delivery/continuous-integration#:~:text=Continuous%20integration%20(CI)%20is%20the,builds%20and%20tests%20then%20run.)) that will process any pull requests made to `main`. The workflow auto-formats the code in the pull request with `prettier` and checks for any `eslint` errors. This allows SWEs to freely make commits on side branches (without enforced formatting or linting) but still prevents code with poor quality or formatting from being pushed to `main`. 
+We implemented a [Github Actions](https://docs.github.com/en/actions) workflow for CI ([continuous integration](<https://www.atlassian.com/continuous-delivery/continuous-integration#:~:text=Continuous%20integration%20(CI)%20is%20the,builds%20and%20tests%20then%20run.>)) that will process any pull requests made to `main`. The workflow auto-formats the code in the pull request with `prettier` and checks for any `eslint` errors. This allows SWEs to freely make commits on side branches (without enforced formatting or linting) but still prevents code with poor quality or formatting from being pushed to `main`.
 
 If you have `eslint` and `prettier` VSCode extensions installed on VSCode (see below), your editor should auto-format and notify you of linting errors as you code, but you can also run formatting manually (see `eslint` and `prettier` sections above). Finally, you can use the following terminal command, which will auto format all your code and notify you of any linting issues that need to be fixed for your pull request to pass the integration test.
 
@@ -362,18 +364,19 @@ npm run format
 
 For SSWEs, you should protect your `main` branch from unprotected pushes using a Github [branch protection rule](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule). We recommend you use the following settings for `main`:
 
-* Require a pull request before merging
-  * Require approvals (1)
-  * Dismiss stale pull request approvals when new commits are pushed
-* Require status checks to pass before merging
-  * Require branches to be up to date before merging
-  * **Required status checks: "Format source code and check for linting errors"** (important to get our CI workflow to run!)
+- Require a pull request before merging
+  - Require approvals (1)
+  - Dismiss stale pull request approvals when new commits are pushed
+- Require status checks to pass before merging
+  - Require branches to be up to date before merging
+  - **Required status checks: "Format source code and check for linting errors"** (important to get our CI workflow to run!)
 
 #### VSCode-specific settings
 
 The project contains workspace-specific VSCode settings in `.vscode/settings.json`. These settings (which only apply when inside the project workspace) set the editor to:
 
 - Format with `prettier`, then lint with `eslint` on save (this is the quickest way)
+
   - (Note that we use an extension, [Format Code Action](https://marketplace.visualstudio.com/items?itemName=rohit-gohri.format-code-action&ssr=false#review-details), to achieve this specific order)
 
 - Use `prettier` as the default formatter
@@ -393,7 +396,7 @@ Allows you to categorize your comments into color-coded Alerts, Queries, TODOs, 
 
 Enables you to collaboratively edit and debug with others in real time. Think Google Docs functionality but for your codebase.
 
-####  [Format Code Action](https://marketplace.visualstudio.com/items?itemName=rohit-gohri.format-code-action&ssr=false#review-details)
+#### [Format Code Action](https://marketplace.visualstudio.com/items?itemName=rohit-gohri.format-code-action&ssr=false#review-details)
 
 Allows us to run `eslint` after `prettier` on save, which is the fastest order.
 
