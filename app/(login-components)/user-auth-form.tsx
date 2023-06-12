@@ -13,13 +13,18 @@ import { useState, type BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+// Template: https://github.com/shadcn/taxonomy/blob/main/components/user-auth-form.tsx
+
+// Create Zod object schema with validations
 const userAuthSchema = z.object({
   email: z.string().email(),
 });
 
+// Use Zod to extract inferred type from schema
 type FormData = z.infer<typeof userAuthSchema>;
 
 export function UserAuthForm({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  // Create form with react-hook-form and use Zod schema to validate the form submission (with resolver)
   const {
     register,
     handleSubmit,

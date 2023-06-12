@@ -82,10 +82,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   ```bash
   added 414 packages, and audited 415 packages in 13s
-
+  
   149 packages are looking for funding
   run `npm fund` for details
-
+  
   found 0 vulnerabilities
   ```
 
@@ -170,6 +170,10 @@ Typescript applies type inference to your files automatically, but you can also 
 # Type check all typescript files (--noEmit disables generation of a report file, which is not needed)
 npx tsc --noEmit
 ```
+
+A quick tip on coding with Typescript: When fixing type errors, you should avoid using [type assertions](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule) (with `as`) and the [`any` type](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule) **as much as possible**. These functionalities are escape hatches built into Typescript to allow you to avoid type-checking, but they don't actually solve the underlying problem of a type error! Simply ignoring the problem by avoiding type-checking will only make future bugs much more difficult to fix. Personally, out of all the type errors I've resolved in Typescript, I've only had one situation where the `as` keyword was necessary; every other time, the type error exposed an important error/oversight in my code. 
+
+Finally, note that type definitions for many `npm` packages are [maintained by the Typescript community](https://github.com/DefinitelyTyped/DefinitelyTyped) and may be found with the `@types/` prefix on [`npm`](https://www.npmjs.com), if they're not already included in the package itself (generally they are). Several of the config files in the project (ex: `.prettierrc.cjs`) manually import type definitions, but you generally will not need to worry about such syntax in your actual source code.
 
 > **More references**
 >
@@ -289,12 +293,17 @@ The preset configurations should work great out of the box, but feel free to cus
 A [linting](<https://en.wikipedia.org/wiki/Lint_(software)>) tool that statically analyzes our code to detect and fix issues with code quality (like unused variables, residual console statements, etc). `eslint` is configured to run on save and before making a `git commit` (see below), but you can also run it manually with the following terminal commands:
 
 ```bash
-# Easiest way to lint all files in the project.
+# Easiest way to lint all relevant files in the project. Notifies you of any linting issues.
 npm run lint
+
+# Lint all relevant files in the project, fix any auto-fixable issues, and notify you of the remaining issues.
+npm run lint:fix
+
+# Specification of these npm scripts are in package.json
 ```
 
 ```bash
-# Lint a specific file (or all files by using "."). Add the --fix tag to have eslint correct errors that are automatically fixable.
+# Lint a specific file (or all relevant files by using "."). Add the --fix tag to have eslint correct errors that are automatically fixable.
 npx eslint [filepath or .] --fix
 ```
 
@@ -307,6 +316,8 @@ If you want to modify the `eslint` rules, you can edit the `rules` array in `.es
 npx eslint-config-prettier src/index.tsx
 ```
 
+However, note that **if you encounter an `eslint` error when coding, you shouldn't just immediately ignore it or turn the rule off**. These rules are put in place to catch errors you may not even know about, so you should do some extensive research on the rule (and how you might change your code to conform to it) and only ignore/disable the rule as a **last resort**. Listening to `eslint` builds good code quality habits!
+
 Config file is in `.eslintrc.cjs`.
 
 #### [`prettier`](https://prettier.io)
@@ -314,11 +325,13 @@ Config file is in `.eslintrc.cjs`.
 Formats outputted code to a consistent, opinionated style **after** it has been written. `prettier` is configured to run on save and before making a git commit (see below), but you can also run it manually with the following terminal commands:
 
 ```bash
-# Check a specific file (or all files by using ".") for formatting errors and give a human-friendly summary of all errors.
-npx prettier [filepath or .] --check
+# Check files for formatting errors and give a human-friendly summary of all errors.
+npm run prettier
 
-# Fix all formatting errors in-place for a specific file (or all files by using ".").
-npx prettier [filepath or .] --write
+# Fix formatting errors in-place for all files.
+npm run prettier:fix
+
+# Specification of these npm scripts are in package.json
 ```
 
 Note that `prettier` and `eslint` have [overlapping functionalities](https://www.robinwieruch.de/prettier-eslint/), so to prevent conflict between the two we also add the following two packages:
@@ -332,23 +345,43 @@ If you need to exclude certain folders/files from the `prettier` formatting, you
 
 #### [EditorConfig](https://editorconfig.org)
 
-Standardizes some settings (only in the project workspace) across different editors (Sublime, VSCode, etc) to apply formatting rules **before** writing code (e.g. hitting `tab` leaves two spaces). Config file is in `.editorconfig`.
+Standardizes some settings (only in the project workspace) across different editors (Sublime, VSCode, etc) to apply formatting rules **before** writing code (e.g. hitting `tab` leaves two spaces). Config file is in `.editorconfig`. Both EditorConfig and `prettier` work in tandem to enforce consistent styling/formatting across your entire team, which will help prevent some annoying formatting situations (ex: every line in a pull request being marked as a `diff` because one team member uses tab indents and another uses space indents).
 
-#### [`husky`](https://github.com/typicode/husky) and [`lint-staged`](https://github.com/okonet/lint-staged)
+#### Github CI workflow
 
-`husky` sets a pre-commit hooks that runs typechecking (with `tsc`), `eslint`, and `prettier` checking on our code before making a `git commit`, to prevent us from committing code with poor quality or formatting. `lint-staged` saves time by setting typechecking, `eslint`, and `prettier` to run only on our staged files. This keeps from having to check the entire codebase for every commit. Husky settings are in `.husky/` folder. `lint-staged` config is in `.lintstagedrc.cjs`.
+We implemented a [Github Actions](https://docs.github.com/en/actions) workflow for CI ([continuous integration](https://www.atlassian.com/continuous-delivery/continuous-integration#:~:text=Continuous%20integration%20(CI)%20is%20the,builds%20and%20tests%20then%20run.)) that will process any pull requests made to `main`. The workflow auto-formats the code in the pull request with `prettier` and checks for any `eslint` errors. This allows SWEs to freely make commits on side branches (without enforced formatting or linting) but still prevents code with poor quality or formatting from being pushed to `main`. 
+
+If you have `eslint` and `prettier` VSCode extensions installed on VSCode (see below), your editor should auto-format and notify you of linting errors as you code, but you can also run formatting manually (see `eslint` and `prettier` sections above). Finally, you can use the following terminal command, which will auto format all your code and notify you of any linting issues that need to be fixed for your pull request to pass the integration test.
+
+```bash
+# Format all relevant files with Prettier and check all relevant files for eslint errors
+npm run format
+
+# Specification of npm scripts are in package.json
+```
+
+For SSWEs, you should protect your `main` branch from unprotected pushes using a Github [branch protection rule](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule). We recommend you use the following settings for `main`:
+
+* Require a pull request before merging
+  * Require approvals (1)
+  * Dismiss stale pull request approvals when new commits are pushed
+* Require status checks to pass before merging
+  * Require branches to be up to date before merging
+  * **Required status checks: "Format source code and check for linting errors"** (important to get our CI workflow to run!)
 
 #### VSCode-specific settings
 
 The project contains workspace-specific VSCode settings in `.vscode/settings.json`. These settings (which only apply when inside the project workspace) set the editor to:
 
-- Format with `prettier` and lint with `eslint` on save
+- Format with `prettier`, then lint with `eslint` on save (this is the quickest way)
+  - (Note that we use an extension, [Format Code Action](https://marketplace.visualstudio.com/items?itemName=rohit-gohri.format-code-action&ssr=false#review-details), to achieve this specific order)
+
 - Use `prettier` as the default formatter
 - Prompt the user to use the codebase's version of Typescript for Intellisense (preventing errors arising from differing Typescript versions)
 
 ### VSCode Extensions
 
-#### `eslint`, `prettier`, `editorconfig`, and `prisma`
+#### `eslint`, `prettier`, `editorconfig`, and `tailwindcss`
 
 These add in-editor support (syntax highlighting, error checking, etc.) for their respective tools. The recommended workspace extensions are configured in `.vscode/extensions.json`.
 
@@ -359,6 +392,10 @@ Allows you to categorize your comments into color-coded Alerts, Queries, TODOs, 
 #### [Live Share](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare)
 
 Enables you to collaboratively edit and debug with others in real time. Think Google Docs functionality but for your codebase.
+
+####  [Format Code Action](https://marketplace.visualstudio.com/items?itemName=rohit-gohri.format-code-action&ssr=false#review-details)
+
+Allows us to run `eslint` after `prettier` on save, which is the fastest order.
 
 ---
 
@@ -385,10 +422,12 @@ There's no one-size-fits-all solution to web development. This project is meant 
 ### Data fetching and other backend tools
 
 - [SWR](https://swr.vercel.app): React hooks for data fetching. Recommended by Next.js!
-- [Tanstack Query](https://tanstack.com/query/latest): React hooks for data fetching. Provides more features than SWR but is also a bit more complex
+- [Tanstack Query](https://tanstack.com/query/latest): React hooks for data fetching. Provides more features than SWR but is also a bit more complex. It's one of the most popular data fetching packages for React apps.
 - [Apollo Client](https://www.apollographql.com/docs/react/): A state management library for querying GraphQL APIs
 - [tRPC](https://trpc.io): Allows us to build and consume typesafe APIs from our Next.js backend (API routes) without schemas or code generation
 - [Prisma](https://www.prisma.io): A Typescript ORM ([object-relational mapping](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)) that allows you to query and manage your database in a typesafe manner
+- [Kysely](https://kysely.dev): A typesafe and auto-completion friendly SQL query builder for Typescript. It's a more lightweight typesafety solution than Prisma.
+- [Drizzle](https://orm.drizzle.team): Another Typescript ORM that is more lightweight than Prisma, albeit newer.
 
 ### Testing frameworks
 

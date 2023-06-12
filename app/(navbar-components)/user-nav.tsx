@@ -18,8 +18,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function UserNav({ session }: { session: Session | null }) {
+  // Create Supabase client (for client components)
   const supabaseClient = createClientComponentClient<Database>();
-  // const user = useUser();
 
   const router = useRouter();
 
