@@ -177,7 +177,7 @@ We implemented a [Github Actions](https://docs.github.com/en/actions) workflow f
 
 ## Stack references
 
-This section provides a short description and important commands related to each component of the stack.
+This section provides a short description and important commands related to each component of the stack.Ç
 
 ### Typescript
 
