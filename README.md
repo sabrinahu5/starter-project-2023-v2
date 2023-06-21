@@ -85,10 +85,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   ```bash
   added 414 packages, and audited 415 packages in 13s
-
+  
   149 packages are looking for funding
   run `npm fund` for details
-
+  
   found 0 vulnerabilities
   ```
 
@@ -353,10 +353,7 @@ npm run prettier:fix
 # Specification of these npm scripts are in package.json
 ```
 
-Note that `prettier` and `eslint` have [overlapping functionalities](https://www.robinwieruch.de/prettier-eslint/), so to prevent conflict between the two we also add the following two packages:
-
-- [`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier#cli-helper-tool): Disables all `eslint` rules that would conflict with `prettier`
-- [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier): Integrates `prettier` rules into `eslint` rules
+Note that `prettier` and `eslint` have [overlapping functionalities](https://www.robinwieruch.de/prettier-eslint/), so to prevent conflict between the two we also add [`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier#cli-helper-tool), which disables all `eslint` rules that would conflict with `prettier`
 
 Finally, our `prettier` configuration also includes a [plugin](https://github.com/trivago/prettier-plugin-sort-imports) for sorting import declarations.
 
@@ -464,7 +461,6 @@ Realtime functionality is accomplished really easily with Supabase and Firebase,
 - [Kafka](https://kafka.apache.org)
 - [Soketi](https://docs.soketi.app)
 - [Hop](https://docs.hop.io/getting-started/introduction)
-- Dude why do all the realtime platforms have such strange names lol
 
 ### The T3 Stack
 
