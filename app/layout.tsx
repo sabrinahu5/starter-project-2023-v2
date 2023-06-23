@@ -38,7 +38,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </div>
             </div>
             {/* Conditionally display website if logged in, else display login page */}
-            <div className="flex-1 space-y-4 p-8 pt-6">{session ? children : <LoginPage />}</div>
+            <div className="flex-1 space-y-4 p-8 pt-6">
+              <main>{session ? children : <LoginPage />}</main>
+            </div>
           </div>
         </Providers>
         <Toaster />
