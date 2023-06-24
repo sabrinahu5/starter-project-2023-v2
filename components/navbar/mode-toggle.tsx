@@ -1,14 +1,14 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { Icons } from "../../components/icons";
-import { Button } from "../../components/ui/button";
+import { Icons } from "../icons";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 
 // https://github.com/pacocoursey/next-themes
 

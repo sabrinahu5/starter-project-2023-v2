@@ -1,12 +1,12 @@
-import { ModeToggle } from "@/app/(navbar-components)/mode-toggle";
+import { ModeToggle } from "@/components/navbar/mode-toggle";
 import { Toaster } from "@/components/ui/toaster";
 import { type Database } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import LoginPage from "./(login-components)/login-page";
-import UserNav from "./(navbar-components)/user-nav";
+import LoginPage from "../components/login/login-page";
+import UserNav from "../components/navbar/user-nav";
 import "./globals.css";
 import { Providers } from "./providers";
 
