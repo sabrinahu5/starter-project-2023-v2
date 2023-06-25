@@ -103,3 +103,11 @@ export function TypographySmall({ children }: { children: string }) {
 export function TypographyMuted({ children }: { children: string }) {
   return <p className="text-sm text-muted-foreground">{children}</p>;
 }
+
+export function PageHeader({ children }: { children: string }) {
+  return <h2 className="text-2xl font-bold tracking-tight">{children}</h2>;
+}
+
+export function PageSubHeader({ children }: { children: string }) {
+  return <p className="text-muted-foreground">{children}</p>;
+}
