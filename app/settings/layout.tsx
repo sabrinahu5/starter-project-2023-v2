@@ -1,4 +1,4 @@
-import { SidebarNav } from "@/components/sidebar-nav";
+import { SidebarNav } from "@/components/global/sidebar-nav";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader1, PageSubHeader1 } from "@/components/ui/typography";
 

@@ -1,12 +1,12 @@
-import { ModeToggle } from "@/components/navbar/mode-toggle";
+import { ModeToggle } from "@/app/(components-navbar)/mode-toggle";
 import { Toaster } from "@/components/ui/toaster";
 import { type Database } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import LoginPage from "../components/login/login-page";
-import UserNav from "../components/navbar/user-nav";
+import LoginPage from "./(components-login)/login-page";
+import UserNav from "./(components-navbar)/user-nav";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -39,7 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </div>
             {/* Conditionally display website if logged in, else display login page */}
             {/* <div className="flex-1 space-y-4 p-8 pt-6"> */}
-            <div className="hidden space-y-6 p-10 pb-16 md:block">
+            <div className="space-y-6 p-10 pb-16 md:block">
               <main>{session ? children : <LoginPage />}</main>
             </div>
             {/* </div> */}
