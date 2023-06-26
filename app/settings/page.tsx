@@ -1,10 +1,17 @@
-import { TypographyH2, TypographyP } from "@/components/ui/typography";
+import { Separator } from "@/components/ui/separator";
+import { ProfileForm } from "./profile/profile-form";
 
 export default function Settings() {
   return (
     <>
-      <TypographyH2>Settings</TypographyH2>
-      <TypographyP>Page for editing settings</TypographyP>
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-medium">Profile</h3>
+          <p className="text-sm text-muted-foreground">This is how others will see you on the site.</p>
+        </div>
+        <Separator />
+        <ProfileForm />
+      </div>
     </>
   );
 }

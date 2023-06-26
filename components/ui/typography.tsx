@@ -104,10 +104,18 @@ export function TypographyMuted({ children }: { children: string }) {
   return <p className="text-sm text-muted-foreground">{children}</p>;
 }
 
-export function PageHeader({ children }: { children: string }) {
+export function PageHeader1({ children }: { children: string }) {
   return <h2 className="text-2xl font-bold tracking-tight">{children}</h2>;
 }
 
-export function PageSubHeader({ children }: { children: string }) {
+export function PageSubHeader1({ children }: { children: string }) {
   return <p className="text-muted-foreground">{children}</p>;
+}
+
+export function PageHeader2({ children }: { children: string }) {
+  return <h3 className="text-lg font-medium">{children}</h3>;
+}
+
+export function PageSubHeader2({ children }: { children: string }) {
+  return <p className="text-sm text-muted-foreground">{children}</p>;
 }

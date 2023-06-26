@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -37,7 +37,7 @@ export default function UserNav({ session }: { session: Session | null }) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/avatars/01.png" alt="@shadcn" />
+            {/* <AvatarImage src="/avatars/01.png" alt="@shadcn" /> */}
             <AvatarFallback>{session.user.email?.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>
@@ -53,13 +53,13 @@ export default function UserNav({ session }: { session: Session | null }) {
         <DropdownMenuGroup>
           {/* Using Next Link: https://github.com/radix-ui/primitives/issues/1105 */}
           <DropdownMenuItem asChild>
-            <Link href="/profile">
+            <Link href="/settings">
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/settings">
+            <Link href="/settings/general">
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </Link>
