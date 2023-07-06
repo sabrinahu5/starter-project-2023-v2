@@ -29,7 +29,11 @@ export default function UserNav({ session }: { session: Session | null }) {
   };
 
   if (!session) {
-    return null;
+    return (
+      <Button asChild>
+        <Link href="/login">Log in</Link>
+      </Button>
+    );
   }
 
   return (

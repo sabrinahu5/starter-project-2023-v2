@@ -8,3 +8,11 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+// Helper to pause execution of an async function for the specified number of milliseconds. Useful for debugging (e.g. loading states)
+// https://alvarotrigo.com/blog/wait-1-second-javascript/
+export function delay(milliseconds: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
+}
