@@ -1,6 +1,10 @@
 import { SidebarNav } from "@/components/global/sidebar-nav";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader1, PageSubHeader1 } from "@/components/ui/typography";
+import { type Database } from "@/lib/schema";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const sidebarNavItems = [
   {
@@ -17,7 +21,18 @@ interface SettingsLayoutProps {
   children: React.ReactNode;
 }
 
-export default function SettingsLayout({ children }: SettingsLayoutProps) {
+export default async function SettingsLayout({ children }: SettingsLayoutProps) {
+  // Create supabase server component client and obtain user session from stored cookie
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    // this is a protected route - only users who are signed in can view this route
+    redirect("/");
+  }
+
   return (
     <>
       <div className="space-y-0.5">

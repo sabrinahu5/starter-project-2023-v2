@@ -1,8 +1,7 @@
 import { ModeToggle } from "@/app/(components-navbar)/mode-toggle";
 import { Toaster } from "@/components/ui/toaster";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
 import LoginButton from "./(components-navbar)/login-button";
+import Navbar from "./(components-navbar)/navbar";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -20,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="flex-col md:flex">
             <div className="border-b">
               <div className="flex h-16 items-center px-4">
-                <MainNav className="mx-6" />
+                <Navbar className="mx-6" />
                 <div className="ml-auto flex items-center space-x-4">
                   <ModeToggle />
                   <LoginButton />
@@ -38,15 +37,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Toaster />
       </body>
     </html>
-  );
-}
-
-function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
-  return (
-    <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)} {...props}>
-      <Link href="/" className="text-sm font-medium transition-colors hover:text-primary">
-        Home
-      </Link>
-    </nav>
   );
 }
