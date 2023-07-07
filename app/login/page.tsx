@@ -1,6 +1,22 @@
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { UserAuthForm } from "./user-auth-form";
+import { type Database } from "@/lib/schema";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+
+  // Create supabase server component client and obtain user session from stored cookie
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session) {
+    // Users who are already signed in should be redirected to dashboard
+    redirect("/dashboard");
+  }
+
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
       <div className="flex flex-col space-y-2 text-center">
