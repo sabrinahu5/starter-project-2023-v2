@@ -1,10 +1,11 @@
-import { TypographyH2, TypographyP } from "@/components/ui/typography";
 import { type Database } from "@/lib/schema";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import Card from "./card";
+import AddEntry from "./add-entry";
 
-export default async function Dashboard() {
+export default async function Deliverable() {
   // Create supabase server component client and obtain user session from stored cookie
   const supabase = createServerComponentClient<Database>({ cookies });
   const {
@@ -16,13 +17,17 @@ export default async function Dashboard() {
     redirect("/");
   }
 
-  const userEmail = session.user.email;
+  const { data: species } = await supabase.from("species").select("*");
 
   return (
     <>
-      <TypographyH2>Dashboard</TypographyH2>
-      <TypographyP>This is a protected route accessible only to signed-in users.</TypographyP>
-      {userEmail && <TypographyP>{`Your email is ${userEmail}`}</TypographyP>}
+      <div className="mb-5 flex items-center justify-between">
+        <h2 className="text-3xl font-semibold">
+          T4SG <span className="text-green-400">Biodiversity Hub</span>
+        </h2>
+      < AddEntry key={new Date().getTime()} />
+      </div>
+      <div className="flex flex-wrap">{species && species.map((species) => <Card key={species.id} {...species} />)}</div>
     </>
   );
 }

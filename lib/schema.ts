@@ -35,35 +35,38 @@ export interface Database {
         Row: {
           author: string;
           common_name: string | null;
-          continents: Database["public"]["Enums"]["continent"][] | null;
+          continents: Database["public"]["Enums"]["continent"] | null;
           description: string | null;
           id: number;
           kingdom: Database["public"]["Enums"]["kingdom"];
-          oceans: Database["public"]["Enums"]["ocean"][] | null;
+          oceans: Database["public"]["Enums"]["ocean"] | null;
           scientific_name: string;
           total_population: number | null;
+          image: string | null;
         };
         Insert: {
           author: string;
           common_name?: string | null;
-          continents?: Database["public"]["Enums"]["continent"][] | null;
+          continents?: Database["public"]["Enums"]["continent"] | null;
           description?: string | null;
           id?: number;
           kingdom: Database["public"]["Enums"]["kingdom"];
-          oceans?: Database["public"]["Enums"]["ocean"][] | null;
+          oceans?: Database["public"]["Enums"]["ocean"] | null;
           scientific_name: string;
           total_population?: number | null;
+          image?: string | null;
         };
         Update: {
           author?: string;
           common_name?: string | null;
-          continents?: Database["public"]["Enums"]["continent"][] | null;
+          continents?: Database["public"]["Enums"]["continent"] | null;
           description?: string | null;
           id?: number;
           kingdom?: Database["public"]["Enums"]["kingdom"];
-          oceans?: Database["public"]["Enums"]["ocean"][] | null;
+          oceans?: Database["public"]["Enums"]["ocean"] | null;
           scientific_name?: string;
           total_population?: number | null;
+          image?: string | null;
         };
         Relationships: [
           {
