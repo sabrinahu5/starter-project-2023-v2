@@ -16,6 +16,11 @@ const nextConfig = {
         hostname: "raw.githubusercontent.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "en.wikipedia.org",
+        port: "",
+      },
     ],
   },
 };
