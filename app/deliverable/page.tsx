@@ -1,10 +1,9 @@
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import { type Database } from "@/lib/schema";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Card from "./card";
+import AddEntry from "./add-entry";
 
 export default async function Deliverable() {
   // Create supabase server component client and obtain user session from stored cookie
@@ -22,14 +21,11 @@ export default async function Deliverable() {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-5">
+      <div className="mb-5 flex items-center justify-between">
         <h2 className="text-3xl font-semibold">
           T4SG <span className="text-green-400">Biodiversity Hub</span>
         </h2>
-        <Button variant="secondary">
-          <Icons.add className="mr-3 h-5 w-5" />
-          Add Entry
-        </Button>
+      < AddEntry />
       </div>
       <div className="flex flex-wrap">{species && species.map((specie) => <Card key={specie.id} {...specie} />)}</div>
     </>
