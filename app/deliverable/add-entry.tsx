@@ -4,7 +4,6 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -25,7 +24,7 @@ import { z } from "zod";
 export default function AddEntry() {
   const supabase = createClientComponentClient<Database>();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
   const [userId, setUserId] = useState<null | string>(null);
 
   useEffect(() => {
@@ -34,9 +33,7 @@ export default function AddEntry() {
       if (!data.session) return;
       setUserId(data.session.user.id);
     }
-    getSession()
-      .then(() => setIsLoading(false))
-      .catch(() => setIsLoading(false));
+    void getSession();
   }, [supabase.auth]);
 
   const speciesSchema = z.object({
@@ -53,12 +50,23 @@ export default function AddEntry() {
   });
   type FormData = z.infer<typeof speciesSchema>;
 
+  const defaultValues: FormData = {
+    commonName: "",
+    continents: undefined,
+    description: "",
+    kingdom: "Animalia",
+    oceans: undefined,
+    scientificName: "",
+    totalPopulation: 0,
+    imageUrl: "",
+  };
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(speciesSchema),
+    defaultValues,
   });
 
   const onSubmit = async (input: FormData) => {
@@ -79,14 +87,15 @@ export default function AddEntry() {
         },
       ])
       .then(() => {
-        void router.push("/deliverable");
+        setOpen(false);
+        router.refresh();
       });
   };
 
   return (
-    <Dialog>
+    <Dialog open={open}>
       <DialogTrigger asChild>
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={() => setOpen(true)}>
           <Icons.add className="mr-3 h-5 w-5" />
           Add Entry
         </Button>
@@ -102,7 +111,11 @@ export default function AddEntry() {
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="scientificName">Scientific Name</Label>
-              <Input id="scientificName" placeholder="Cavia porcellus" {...register("scientificName")} />
+              <Input
+                id="scientificName"
+                placeholder="Cavia porcellus"
+                {...(register("scientificName"))}
+              />
               {errors.scientificName && (
                 <span className="mt-2 block text-red-800">{errors.scientificName?.message}</span>
               )}
@@ -191,12 +204,12 @@ export default function AddEntry() {
               {errors.description && <span className="mt-2 block text-red-800">{errors.description?.message}</span>}
             </div>
           </div>
-          <DialogClose asChild>
-            <Button type="submit" className="float-right mt-3" disabled={isLoading}>
-              {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-              Add Entry
-            </Button>
-          </DialogClose>
+          <Button type="submit" className="float-right m-3">
+            Add Entry
+          </Button>
+          <Button className="float-right m-3" variant="secondary" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
