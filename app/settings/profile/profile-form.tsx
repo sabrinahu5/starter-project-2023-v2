@@ -67,7 +67,12 @@ export function ProfileForm() {
         </pre>
       ),
     });
+    // add submit functionality here!! which is editing supabase entry
   }
+
+  // https://supabase.com/docs/guides/getting-started/tutorials/with-nextjs
+  // ALSO ADD SUPABASE FUNCTION TO GET CURRENT PROFILE DETAILS FROM SUPABASE
+  // async
 
   return (
     <Form {...form}>
