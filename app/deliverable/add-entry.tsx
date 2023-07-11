@@ -207,7 +207,7 @@ export default function AddEntry() {
           <Button type="submit" className="float-right m-3">
             Add Entry
           </Button>
-          <Button className="float-right m-3" variant="secondary" onClick={() => setOpen(false)}>
+          <Button type="button" className="float-right m-3" variant="secondary" onClick={() => setOpen(false)}>
             Cancel
           </Button>
         </form>
