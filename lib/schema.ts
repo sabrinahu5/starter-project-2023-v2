@@ -42,6 +42,7 @@ export interface Database {
           oceans: Database["public"]["Enums"]["ocean"][] | null;
           scientific_name: string;
           total_population: number | null;
+          image: string | null;
         };
         Insert: {
           author: string;
@@ -53,6 +54,7 @@ export interface Database {
           oceans?: Database["public"]["Enums"]["ocean"][] | null;
           scientific_name: string;
           total_population?: number | null;
+          image?: string | null;
         };
         Update: {
           author?: string;
@@ -64,6 +66,7 @@ export interface Database {
           oceans?: Database["public"]["Enums"]["ocean"][] | null;
           scientific_name?: string;
           total_population?: number | null;
+          image?: string | null;
         };
         Relationships: [
           {
