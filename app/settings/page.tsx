@@ -1,7 +1,9 @@
 import { Separator } from "@/components/ui/separator";
+import { getProfile } from "./profile/get-profile";
 import { ProfileForm } from "./profile/profile-form";
 
-export default function Settings() {
+export default async function Settings() {
+  const profileData = await getProfile();
   return (
     <>
       <div className="space-y-6">
@@ -10,7 +12,7 @@ export default function Settings() {
           <p className="text-sm text-muted-foreground">This is how others will see you on the site.</p>
         </div>
         <Separator />
-        <ProfileForm />
+        <ProfileForm profile={profileData} />
       </div>
     </>
   );

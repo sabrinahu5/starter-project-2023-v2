@@ -11,7 +11,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
+import { type Database } from "@/lib/schema";
 import { cn } from "@/lib/utils";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { type BaseSyntheticEvent } from "react";
 
 const profileFormSchema = z.object({
@@ -46,7 +48,8 @@ const defaultValues: Partial<ProfileFormValues> = {
   urls: [{ value: "https://shadcn.com" }, { value: "http://twitter.com/shadcn" }],
 };
 
-export function ProfileForm() {
+// add type later
+export function ProfileForm(profile: any) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
@@ -58,21 +61,24 @@ export function ProfileForm() {
     control: form.control,
   });
 
-  function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-    // add submit functionality here!! which is editing supabase entry
-  }
+  const supabase = createClientComponentClient<Database>();
 
-  // https://supabase.com/docs/guides/getting-started/tutorials/with-nextjs
-  // ALSO ADD SUPABASE FUNCTION TO GET CURRENT PROFILE DETAILS FROM SUPABASE
-  // async
+  const onSubmit = async (data: ProfileFormValues) => {
+    await supabase
+      .from("profiles")
+      // add urls column to database?
+      .update({ biography: data.bio, display_name: data.username, email: data.email })
+      .eq("id", profile.profile[0].id);
+    toast({
+      title: "Profile updated successfully!",
+      // title: "You submitted the following values:",
+      // description: (
+      //   <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+      //     <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+      //   </pre>
+      // ),
+    });
+  };
 
   return (
     <Form {...form}>
@@ -84,7 +90,10 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input
+                  placeholder={profile.profile[0].display_name != null ? profile.profile[0].display_name : "shadcn"}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a pseudonym. You can only change this once
@@ -107,7 +116,7 @@ export function ProfileForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
+                  <SelectItem value={profile.profile[0].email}>{profile.profile[0].email}</SelectItem>
                   <SelectItem value="m@google.com">m@google.com</SelectItem>
                   <SelectItem value="m@support.com">m@support.com</SelectItem>
                 </SelectContent>
