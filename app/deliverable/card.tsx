@@ -5,13 +5,15 @@ type Species = Database["public"]["Tables"]["species"]["Row"];
 
 export default function Card(species: Species) {
   return (
-    <div className="flex-none m-4 w-72 min-w-72 rounded border-2 p-3 shadow">
-      {species.image && <div className="relative w-full h-40">
-        <Image src={species.image} alt={species.scientific_name} fill style={{ objectFit: "cover" }}/>
-      </div>}
+    <div className="min-w-72 m-4 w-72 flex-none rounded border-2 p-3 shadow">
+      {species.image && (
+        <div className="relative h-40 w-full">
+          <Image src={species.image} alt={species.scientific_name} fill style={{ objectFit: "cover" }} />
+        </div>
+      )}
       <h3 className="mt-3 text-2xl font-semibold">{species.common_name}</h3>
       <h4 className="text-lg font-light italic">{species.scientific_name}</h4>
-      <p>{species.description}</p>
+      <p>{species.description ? species.description.slice(0, 150).trim() + "..." : ""}</p>
       {/* Replace with detailed view */}
       <Button className="mt-3 w-full">Learn More</Button>
     </div>

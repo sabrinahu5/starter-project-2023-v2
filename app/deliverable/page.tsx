@@ -25,7 +25,7 @@ export default async function Deliverable() {
         <h2 className="text-3xl font-semibold">
           T4SG <span className="text-green-400">Biodiversity Hub</span>
         </h2>
-      < AddEntry key={new Date().getTime()} />
+      < AddEntry key={new Date().getTime()} userId={session.user.id}/>
       </div>
       <div className="flex flex-wrap">{species && species.map((species) => <Card key={species.id} {...species} />)}</div>
     </>
