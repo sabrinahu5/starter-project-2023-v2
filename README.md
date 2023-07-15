@@ -85,10 +85,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   ```bash
   added 414 packages, and audited 415 packages in 13s
-  
+
   149 packages are looking for funding
   run `npm fund` for details
-  
+
   found 0 vulnerabilities
   ```
 

@@ -2,8 +2,8 @@ import { type Database } from "@/lib/schema";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import Card from "./card";
 import AddEntry from "./add-entry";
+import Card from "./card";
 
 export default async function Deliverable() {
   // Create supabase server component client and obtain user session from stored cookie
@@ -25,9 +25,11 @@ export default async function Deliverable() {
         <h2 className="text-3xl font-semibold">
           T4SG <span className="text-green-400">Biodiversity Hub</span>
         </h2>
-      < AddEntry key={new Date().getTime()} userId={session.user.id}/>
+        <AddEntry key={new Date().getTime()} userId={session.user.id} />
       </div>
-      <div className="flex flex-wrap">{species && species.map((species) => <Card key={species.id} {...species} />)}</div>
+      <div className="flex flex-wrap">
+        {species && species.map((species) => <Card key={species.id} {...species} />)}
+      </div>
     </>
   );
 }
