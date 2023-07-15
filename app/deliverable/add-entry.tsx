@@ -60,7 +60,10 @@ export default function AddEntry({ userId }: { userId: string }) {
         <form onSubmit={(e: BaseSyntheticEvent) => void handleSubmit(onSubmit)(e)}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="scientific_name">Scientific Name <span className="text-red-500 italic text-sm">* {errors.scientific_name && "Required"}</span></Label>
+              <Label htmlFor="scientific_name">
+                Scientific Name{" "}
+                <span className="text-sm italic text-red-500">* {errors.scientific_name && "Required"}</span>
+              </Label>
               <Input id="scientific_name" placeholder="Cavia porcellus" {...register("scientific_name")} />
               {/*errors.scientific_name && (
                 <span className="mt-2 block text-red-500">{errors.scientific_name?.message}</span>
@@ -72,7 +75,9 @@ export default function AddEntry({ userId }: { userId: string }) {
               {errors.common_name && <span className="mt-2 block text-red-500">{errors.common_name?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="kingdom">Kingdom <span className="text-red-500 italic text-sm">* {errors.kingdom && "Required"}</span></Label>
+              <Label htmlFor="kingdom">
+                Kingdom <span className="text-sm italic text-red-500">* {errors.kingdom && "Required"}</span>
+              </Label>
               <Controller
                 control={control}
                 name="kingdom"
