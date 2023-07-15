@@ -13,88 +13,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { type Database } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type BaseSyntheticEvent } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useState, type BaseSyntheticEvent } from "react";
+import { Controller, useForm } from "react-hook-form";
+import Select from "react-select";
+import type { FormData } from "../../lib/types";
+import { continentOptions, kingdomOptions, oceanOptions, speciesSchema } from "../../lib/types";
+import { addEntry } from "../mutations";
 
-const continentOptions = [
-  "North America",
-  "South America",
-  "Europe",
-  "Africa",
-  "Asia",
-  "Australia",
-  "Antarctica",
-] as const;
-const kingdomOptions = ["Animalia", "Plantae", "Fungi", "Protista", "Archaea", "Bacteria"] as const;
-const oceanOptions = ["Pacific", "Atlantic", "Indian", "Arctic", "Southern"] as const;
-
-const speciesSchema = z.object({
-  commonName: z.string().optional(),
-  continents: z.enum(continentOptions).optional(),
-  description: z.string().optional(),
-  kingdom: z.enum(kingdomOptions),
-  oceans: z.enum(oceanOptions).optional(),
-  scientificName: z.string().min(1),
-  totalPopulation: z.number().int().positive().min(1).optional(),
-  imageUrl: z.string().optional(),
-});
-type FormData = z.infer<typeof speciesSchema>;
-
-const defaultValues: FormData = {
-  kingdom: "Animalia",
-  scientificName: "",
-};
-
-export default function AddEntry() {
-  const supabase = createClientComponentClient<Database>();
+export default function AddEntry({ userId }: { userId: string }) {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
-  const [userId, setUserId] = useState<null | string>(null);
-
-  useEffect(() => {
-    async function getSession() {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) return;
-      setUserId(data.session.user.id);
-    }
-    void getSession();
-  }, [supabase.auth]);
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(speciesSchema),
-    defaultValues,
   });
 
   const onSubmit = async (input: FormData) => {
-    if (!userId) return;
-    await supabase
-      .from("species")
-      .insert([
-        {
-          author: userId,
-          common_name: input.commonName,
-          continents: input.continents,
-          description: input.description,
-          kingdom: input.kingdom,
-          oceans: input.oceans,
-          scientific_name: input.scientificName,
-          total_population: input.totalPopulation,
-          image: input.imageUrl,
-        },
-      ])
-      .then(() => {
-        setOpen(false);
-        router.refresh();
-      });
+    await addEntry({ ...input, author: userId }).then(() => {
+      setOpen(false);
+      router.refresh();
+    });
   };
 
   return (
@@ -115,87 +60,97 @@ export default function AddEntry() {
         <form onSubmit={(e: BaseSyntheticEvent) => void handleSubmit(onSubmit)(e)}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="scientificName">Scientific Name</Label>
-              <Input id="scientificName" placeholder="Cavia porcellus" {...register("scientificName")} />
-              {errors.scientificName && (
-                <span className="mt-2 block text-red-800">{errors.scientificName?.message}</span>
+              <Label htmlFor="scientific_name">Scientific Name</Label>
+              <Input id="scientific_name" placeholder="Cavia porcellus" {...register("scientific_name")} />
+              {errors.scientific_name && (
+                <span className="mt-2 block text-red-800">{errors.scientific_name.message}</span>
               )}
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="commonName">Common Name</Label>
-              <Input id="commonName" placeholder="Guinea Pig" {...register("commonName")} />
-              {errors.commonName && <span className="mt-2 block text-red-800">{errors.commonName?.message}</span>}
+              <Label htmlFor="common_name">Common Name</Label>
+              <Input id="common_name" placeholder="Guinea Pig" {...register("common_name")} />
+              {errors.common_name && <span className="mt-2 block text-red-800">{errors.common_name?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="kingdom">Kingdom</Label>
-              <select
-                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                id="kingdom"
-                {...register("kingdom")}
-              >
-                <option value="Animalia">Animalia</option>
-                <option value="Plantae">Plantae</option>
-                <option value="Fungi">Fungi</option>
-                <option value="Protista">Protista</option>
-                <option value="Archaea">Archaea</option>
-                <option value="Bacteria">Bacteria</option>
-              </select>
+              <Controller
+                control={control}
+                name="kingdom"
+                defaultValue={kingdomOptions[0]?.value}
+                render={({ field: { onChange, value, ref } }) => (
+                  <Select
+                    className="text-sm"
+                    ref={ref}
+                    value={kingdomOptions.find((c) => c.value === value)}
+                    onChange={(val) => {
+                      if (val) {
+                        onChange(val.value);
+                      }
+                    }}
+                    options={kingdomOptions}
+                  />
+                )}
+              />
               {errors.kingdom && <span className="mt-2 block text-red-800">{errors.kingdom?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="continents">Continent</Label>
-              <select
-                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                id="continents"
-                {...register("continents")}
-              >
-                <option value="North America">North America</option>
-                <option value="South America">South America</option>
-                <option value="Europe">Europe</option>
-                <option value="Africa">Africa</option>
-                <option value="Asia">Asia</option>
-                <option value="Australia">Australia</option>
-                <option value="Antarctica">Antarctica</option>
-              </select>
+              <Controller
+                control={control}
+                name="continents"
+                render={({ field: { onChange, value, ref } }) => (
+                  <Select
+                    className="text-sm"
+                    ref={ref}
+                    value={continentOptions.filter((c) => value?.includes(c.value))}
+                    onChange={(val) => onChange(val.map((c) => c.value))}
+                    options={continentOptions}
+                    isMulti
+                  />
+                )}
+              />
               {errors.continents && <span className="mt-2 block text-red-800">{errors.continents?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="oceans">Ocean</Label>
-              <select
-                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                id="oceans"
-                {...register("oceans")}
-              >
-                <option value="Pacific">Pacific</option>
-                <option value="Atlantic">Atlantic</option>
-                <option value="Indian">Indian</option>
-                <option value="Arctic">Arctic</option>
-                <option value="Southern">Southern</option>
-              </select>
+              <Controller
+                control={control}
+                name="oceans"
+                render={({ field: { onChange, value, ref } }) => (
+                  <Select
+                    className="text-sm"
+                    ref={ref}
+                    value={oceanOptions.filter((c) => value?.includes(c.value))}
+                    onChange={(val) => onChange(val.map((c) => c.value))}
+                    options={oceanOptions}
+                    isMulti
+                  />
+                )}
+              />
               {errors.oceans && <span className="mt-2 block text-red-800">{errors.oceans?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="totalPopulation">Total Population</Label>
+              <Label htmlFor="total_population">Total Population</Label>
               <Input
-                id="totalPopulation"
+                id="total_population"
                 placeholder="300000"
                 type="number"
-                {...register("totalPopulation", {
+                {...register("total_population", {
                   setValueAs: (value: string) => (value === "" ? undefined : parseInt(value) ?? undefined),
                 })}
               />
-              {errors.totalPopulation && (
-                <span className="mt-2 block text-red-800">{errors.totalPopulation?.message}</span>
+              {errors.total_population && (
+                <span className="mt-2 block text-red-800">{errors.total_population?.message}</span>
               )}
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="image">Image</Label>
+              <Label htmlFor="image">Image URL</Label>
               <Input
                 id="image"
                 placeholder="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/George_the_amazing_guinea_pig.jpg/440px-George_the_amazing_guinea_pig.jpg"
-                {...register("imageUrl")}
+                {...register("image")}
               />
-              {errors.imageUrl && <span className="mt-2 block text-red-800">{errors.imageUrl?.message}</span>}
+              {errors.image && <span className="mt-2 block text-red-800">{errors.image?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="description">Description</Label>
