@@ -21,6 +21,35 @@ import { useEffect, useState, type BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+const continentOptions = [
+  "North America",
+  "South America",
+  "Europe",
+  "Africa",
+  "Asia",
+  "Australia",
+  "Antarctica",
+] as const;
+const kingdomOptions = ["Animalia", "Plantae", "Fungi", "Protista", "Archaea", "Bacteria"] as const;
+const oceanOptions = ["Pacific", "Atlantic", "Indian", "Arctic", "Southern"] as const;
+
+const speciesSchema = z.object({
+  commonName: z.string().optional(),
+  continents: z.enum(continentOptions).optional(),
+  description: z.string().optional(),
+  kingdom: z.enum(kingdomOptions),
+  oceans: z.enum(oceanOptions).optional(),
+  scientificName: z.string().min(1),
+  totalPopulation: z.number().int().positive().min(1).optional(),
+  imageUrl: z.string().optional(),
+});
+type FormData = z.infer<typeof speciesSchema>;
+
+const defaultValues: FormData = {
+  kingdom: "Animalia",
+  scientificName: "",
+};
+
 export default function AddEntry() {
   const supabase = createClientComponentClient<Database>();
   const router = useRouter();
@@ -36,30 +65,6 @@ export default function AddEntry() {
     void getSession();
   }, [supabase.auth]);
 
-  const speciesSchema = z.object({
-    commonName: z.string().optional(),
-    continents: z
-      .enum(["North America", "South America", "Europe", "Africa", "Asia", "Australia", "Antarctica"])
-      .optional(),
-    description: z.string().optional(),
-    kingdom: z.enum(["Animalia", "Plantae", "Fungi", "Protista", "Archaea", "Bacteria"]),
-    oceans: z.enum(["Pacific", "Atlantic", "Indian", "Arctic", "Southern"]).optional(),
-    scientificName: z.string(),
-    totalPopulation: z.number().optional(),
-    imageUrl: z.string().optional(),
-  });
-  type FormData = z.infer<typeof speciesSchema>;
-
-  const defaultValues: FormData = {
-    commonName: "",
-    continents: undefined,
-    description: "",
-    kingdom: "Animalia",
-    oceans: undefined,
-    scientificName: "",
-    totalPopulation: 0,
-    imageUrl: "",
-  };
   const {
     register,
     handleSubmit,
@@ -93,7 +98,7 @@ export default function AddEntry() {
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="secondary" onClick={() => setOpen(true)}>
           <Icons.add className="mr-3 h-5 w-5" />
@@ -111,11 +116,7 @@ export default function AddEntry() {
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="scientificName">Scientific Name</Label>
-              <Input
-                id="scientificName"
-                placeholder="Cavia porcellus"
-                {...(register("scientificName"))}
-              />
+              <Input id="scientificName" placeholder="Cavia porcellus" {...register("scientificName")} />
               {errors.scientificName && (
                 <span className="mt-2 block text-red-800">{errors.scientificName?.message}</span>
               )}
@@ -179,7 +180,9 @@ export default function AddEntry() {
                 id="totalPopulation"
                 placeholder="300000"
                 type="number"
-                {...register("totalPopulation", { valueAsNumber: true })}
+                {...register("totalPopulation", {
+                  setValueAs: (value: string) => (value === "" ? undefined : parseInt(value) ?? undefined),
+                })}
               />
               {errors.totalPopulation && (
                 <span className="mt-2 block text-red-800">{errors.totalPopulation?.message}</span>
