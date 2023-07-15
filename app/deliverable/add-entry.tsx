@@ -60,19 +60,19 @@ export default function AddEntry({ userId }: { userId: string }) {
         <form onSubmit={(e: BaseSyntheticEvent) => void handleSubmit(onSubmit)(e)}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="scientific_name">Scientific Name</Label>
+              <Label htmlFor="scientific_name">Scientific Name <span className="text-red-500 italic text-sm">* {errors.scientific_name && "Required"}</span></Label>
               <Input id="scientific_name" placeholder="Cavia porcellus" {...register("scientific_name")} />
-              {errors.scientific_name && (
-                <span className="mt-2 block text-red-800">{errors.scientific_name.message}</span>
-              )}
+              {/*errors.scientific_name && (
+                <span className="mt-2 block text-red-500">{errors.scientific_name?.message}</span>
+              )*/}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="common_name">Common Name</Label>
               <Input id="common_name" placeholder="Guinea Pig" {...register("common_name")} />
-              {errors.common_name && <span className="mt-2 block text-red-800">{errors.common_name?.message}</span>}
+              {errors.common_name && <span className="mt-2 block text-red-500">{errors.common_name?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="kingdom">Kingdom</Label>
+            <Label htmlFor="kingdom">Kingdom <span className="text-red-500 italic text-sm">* {errors.kingdom && "Required"}</span></Label>
               <Controller
                 control={control}
                 name="kingdom"
@@ -91,7 +91,7 @@ export default function AddEntry({ userId }: { userId: string }) {
                   />
                 )}
               />
-              {errors.kingdom && <span className="mt-2 block text-red-800">{errors.kingdom?.message}</span>}
+              {errors.kingdom && <span className="mt-2 block text-red-500">{errors.kingdom?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="continents">Continent</Label>
@@ -109,7 +109,7 @@ export default function AddEntry({ userId }: { userId: string }) {
                   />
                 )}
               />
-              {errors.continents && <span className="mt-2 block text-red-800">{errors.continents?.message}</span>}
+              {errors.continents && <span className="mt-2 block text-red-500">{errors.continents?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="oceans">Ocean</Label>
@@ -127,7 +127,7 @@ export default function AddEntry({ userId }: { userId: string }) {
                   />
                 )}
               />
-              {errors.oceans && <span className="mt-2 block text-red-800">{errors.oceans?.message}</span>}
+              {errors.oceans && <span className="mt-2 block text-red-500">{errors.oceans?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="total_population">Total Population</Label>
@@ -140,7 +140,7 @@ export default function AddEntry({ userId }: { userId: string }) {
                 })}
               />
               {errors.total_population && (
-                <span className="mt-2 block text-red-800">{errors.total_population?.message}</span>
+                <span className="mt-2 block text-red-500">{errors.total_population?.message}</span>
               )}
             </div>
             <div className="flex flex-col space-y-1.5">
@@ -150,7 +150,7 @@ export default function AddEntry({ userId }: { userId: string }) {
                 placeholder="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/George_the_amazing_guinea_pig.jpg/440px-George_the_amazing_guinea_pig.jpg"
                 {...register("image")}
               />
-              {errors.image && <span className="mt-2 block text-red-800">{errors.image?.message}</span>}
+              {errors.image && <span className="mt-2 block text-red-500">{errors.image?.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="description">Description</Label>
@@ -159,7 +159,7 @@ export default function AddEntry({ userId }: { userId: string }) {
                 placeholder="The guinea pig or domestic guinea pig, also known as the cavy or domestic cavy, is a species of rodent belonging to the genus Cavia in the family Caviidae."
                 {...register("description")}
               />
-              {errors.description && <span className="mt-2 block text-red-800">{errors.description?.message}</span>}
+              {errors.description && <span className="mt-2 block text-red-500">{errors.description?.message}</span>}
             </div>
           </div>
           <Button type="submit" className="float-right m-3">
