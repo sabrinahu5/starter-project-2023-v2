@@ -23,11 +23,7 @@ const profileFormSchema = z.object({
     .max(30, {
       message: "Username must not be longer than 30 characters.",
     }),
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
+  email: z.string().email().optional(), // Is there better way to handle read-only?
   bio: z.string().max(160).min(4),
   urls: z
     .array(
@@ -40,19 +36,17 @@ const profileFormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-  bio: "I own a computer.",
-  urls: [{ value: "https://shadcn.com" }, { value: "http://twitter.com/shadcn" }],
-};
-
 // * Note to Ashley: You can grab database types by indexing through the schema as shown below. Note that you can also get other kinds of operations beside just "row" reads.
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 export default function ProfileForm({ profile }: { profile: Profile }) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues,
+    defaultValues: {
+      username: profile.display_name ?? undefined,
+      bio: profile.biography ?? undefined, // only doing this because type error
+      urls: [{ value: "https://shadcn.com" }, { value: "http://twitter.com/shadcn" }],
+    },
     mode: "onChange",
   });
 
@@ -90,7 +84,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder={profile.display_name ?? "Username"} {...field} />
+                <Input placeholder="Username" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a pseudonym.
