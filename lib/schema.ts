@@ -9,21 +9,18 @@ export interface Database {
           display_name: string | null;
           email: string;
           id: string;
-          urls: ({ value?: string | undefined } | undefined)[] | null;
         };
         Insert: {
           biography?: string | null;
           display_name?: string | null;
           email: string;
           id: string;
-          urls: ({ value?: string | undefined } | undefined)[] | null;
         };
         Update: {
           biography?: string | null;
           display_name?: string | null;
           email?: string;
           id?: string;
-          urls?: ({ value?: string | undefined } | undefined)[] | null;
         };
         Relationships: [
           {

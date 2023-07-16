@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { type Database } from "@/lib/schema";
-import { cn } from "@/lib/utils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { type BaseSyntheticEvent } from "react";
 
@@ -25,13 +24,6 @@ const profileFormSchema = z.object({
     }),
   email: z.string().email().optional(), // Is there better way to handle read-only?
   bio: z.string().max(160).min(4),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
-      }),
-    )
-    .optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -45,15 +37,8 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
     defaultValues: {
       username: profile.display_name ?? undefined,
       bio: profile.biography ?? undefined, // only doing this because type error
-      // need to figure out how to grab values from supabase saved in format
-      urls: [{ value: "https://shadcn.com" }, { value: "http://twitter.com/shadcn" }],
     },
     mode: "onChange",
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    name: "urls",
-    control: form.control,
   });
 
   const supabase = createClientComponentClient<Database>();
@@ -61,7 +46,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
   const onSubmit = async (data: ProfileFormValues) => {
     await supabase
       .from("profiles")
-      .update({ biography: data.bio, display_name: data.username, email: data.email, urls: data.urls })
+      .update({ biography: data.bio, display_name: data.username, email: data.email })
       .eq("id", profile.id);
     toast({
       title: "Profile updated successfully!",
@@ -117,33 +102,6 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
             </FormItem>
           )}
         />
-        <div>
-          {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>URLs</FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Add links to your website, blog, or social media profiles.
-                  </FormDescription>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <Button variant="destructive" size="sm" onClick={() => remove(index)}>
-                    Delete
-                  </Button>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => append({ value: "" })}>
-            Add URL
-          </Button>
-        </div>
         <Button type="submit">Update profile</Button>
       </form>
     </Form>
