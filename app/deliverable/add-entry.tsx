@@ -61,7 +61,7 @@ export default function AddEntry({ userId }: { userId: string }) {
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="scientific_name">
-                Scientific Name{" "}
+                Scientific Name
                 <span className="text-sm italic text-red-500">* {errors.scientific_name && "Required"}</span>
               </Label>
               <Input id="scientific_name" placeholder="Cavia porcellus" {...register("scientific_name")} />
