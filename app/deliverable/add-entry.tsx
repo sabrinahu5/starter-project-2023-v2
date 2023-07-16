@@ -18,14 +18,15 @@ import { useRouter } from "next/navigation";
 import { useState, type BaseSyntheticEvent } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
-import type { FormData } from "../../lib/types";
 import { continentOptions, kingdomOptions, oceanOptions, speciesSchema } from "../../lib/types";
 import { addEntry } from "../mutations";
+import { type z } from "zod";
 
 export default function AddEntry({ userId }: { userId: string }) {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
 
+  type FormData = z.infer<typeof speciesSchema>;
   const {
     register,
     handleSubmit,

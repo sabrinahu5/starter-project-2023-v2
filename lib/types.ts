@@ -26,5 +26,3 @@ export const speciesSchema = z.object({
   total_population: z.number().int().positive().min(1).optional(),
   image: z.string().url().optional().or(z.literal("")),
 });
-
-export type FormData = z.infer<typeof speciesSchema>;
