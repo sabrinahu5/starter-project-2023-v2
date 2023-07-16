@@ -45,12 +45,13 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
     defaultValues: {
       username: profile.display_name ?? undefined,
       bio: profile.biography ?? undefined, // only doing this because type error
+      // need to figure out how to grab values from supabase saved in format
       urls: [{ value: "https://shadcn.com" }, { value: "http://twitter.com/shadcn" }],
     },
     mode: "onChange",
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: "urls",
     control: form.control,
   });
@@ -60,17 +61,10 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
   const onSubmit = async (data: ProfileFormValues) => {
     await supabase
       .from("profiles")
-      // add urls column to database?
-      .update({ biography: data.bio, display_name: data.username, email: data.email })
+      .update({ biography: data.bio, display_name: data.username, email: data.email, urls: data.urls })
       .eq("id", profile.id);
     toast({
       title: "Profile updated successfully!",
-      // title: "You submitted the following values:",
-      // description: (
-      //   <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-      //     <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-      //   </pre>
-      // ),
     });
   };
 
@@ -138,6 +132,9 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <Button variant="destructive" size="sm" onClick={() => remove(index)}>
+                    Delete
+                  </Button>
                   <FormMessage />
                 </FormItem>
               )}
