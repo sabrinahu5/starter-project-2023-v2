@@ -111,11 +111,7 @@ export default function AddEntry() {
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="scientificName">Scientific Name</Label>
-              <Input
-                id="scientificName"
-                placeholder="Cavia porcellus"
-                {...(register("scientificName"))}
-              />
+              <Input id="scientificName" placeholder="Cavia porcellus" {...register("scientificName")} />
               {errors.scientificName && (
                 <span className="mt-2 block text-red-800">{errors.scientificName?.message}</span>
               )}
