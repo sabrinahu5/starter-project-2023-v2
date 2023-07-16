@@ -1,4 +1,4 @@
-export type Json = string | number | boolean | null | { [key: string]: Json } | Json[];
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export interface Database {
   public: {
@@ -7,19 +7,19 @@ export interface Database {
         Row: {
           biography: string | null;
           display_name: string | null;
-          email: string | null;
+          email: string;
           id: string;
         };
         Insert: {
           biography?: string | null;
           display_name?: string | null;
-          email?: string | null;
+          email: string;
           id: string;
         };
         Update: {
           biography?: string | null;
           display_name?: string | null;
-          email?: string | null;
+          email?: string;
           id?: string;
         };
         Relationships: [
@@ -35,38 +35,38 @@ export interface Database {
         Row: {
           author: string;
           common_name: string | null;
-          continents: Database["public"]["Enums"]["continent"] | null;
+          continents: Database["public"]["Enums"]["continent"][] | null;
           description: string | null;
           id: number;
+          image: string | null;
           kingdom: Database["public"]["Enums"]["kingdom"];
-          oceans: Database["public"]["Enums"]["ocean"] | null;
+          oceans: Database["public"]["Enums"]["ocean"][] | null;
           scientific_name: string;
           total_population: number | null;
-          image: string | null;
         };
         Insert: {
           author: string;
           common_name?: string | null;
-          continents?: Database["public"]["Enums"]["continent"] | null;
+          continents?: Database["public"]["Enums"]["continent"][] | null;
           description?: string | null;
           id?: number;
+          image?: string | null;
           kingdom: Database["public"]["Enums"]["kingdom"];
-          oceans?: Database["public"]["Enums"]["ocean"] | null;
+          oceans?: Database["public"]["Enums"]["ocean"][] | null;
           scientific_name: string;
           total_population?: number | null;
-          image?: string | null;
         };
         Update: {
           author?: string;
           common_name?: string | null;
-          continents?: Database["public"]["Enums"]["continent"] | null;
+          continents?: Database["public"]["Enums"]["continent"][] | null;
           description?: string | null;
           id?: number;
+          image?: string | null;
           kingdom?: Database["public"]["Enums"]["kingdom"];
-          oceans?: Database["public"]["Enums"]["ocean"] | null;
+          oceans?: Database["public"]["Enums"]["ocean"][] | null;
           scientific_name?: string;
           total_population?: number | null;
-          image?: string | null;
         };
         Relationships: [
           {

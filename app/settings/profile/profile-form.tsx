@@ -48,14 +48,9 @@ const defaultValues: Partial<ProfileFormValues> = {
   urls: [{ value: "https://shadcn.com" }, { value: "http://twitter.com/shadcn" }],
 };
 
+// * Note to Ashley: You can grab database types by indexing through the schema as shown below. Note that you can also get other kinds of operations beside just "row" reads.
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
-// import { type Database } from "@/lib/schema";
-// import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-
-// type NewEntry = Database["public"]["Tables"]["species"]["Insert"];
-
-// add type later
 export default function ProfileForm({ profile }: { profile: Profile }) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -75,7 +70,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
       .from("profiles")
       // add urls column to database?
       .update({ biography: data.bio, display_name: data.username, email: data.email })
-      .eq("id", profile.profile[0].id);
+      .eq("id", profile.id);
     toast({
       title: "Profile updated successfully!",
       // title: "You submitted the following values:",
@@ -97,14 +92,10 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input
-                  placeholder={profile.profile[0].display_name != null ? profile.profile[0].display_name : "shadcn"}
-                  {...field}
-                />
+                <Input placeholder={profile.display_name ?? "Username"} {...field} />
               </FormControl>
               <FormDescription>
-                This is your public display name. It can be your real name or a pseudonym. You can only change this once
-                every 30 days.
+                This is your public display name. It can be your real name or a pseudonym.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -123,7 +114,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value={profile.profile[0].email}>{profile.profile[0].email}</SelectItem>
+                  <SelectItem value={profile.email}>{profile.email}</SelectItem>
                   <SelectItem value="m@google.com">m@google.com</SelectItem>
                   <SelectItem value="m@support.com">m@support.com</SelectItem>
                 </SelectContent>
