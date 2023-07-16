@@ -48,8 +48,15 @@ const defaultValues: Partial<ProfileFormValues> = {
   urls: [{ value: "https://shadcn.com" }, { value: "http://twitter.com/shadcn" }],
 };
 
+type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+
+// import { type Database } from "@/lib/schema";
+// import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
+// type NewEntry = Database["public"]["Tables"]["species"]["Insert"];
+
 // add type later
-export function ProfileForm(profile: any) {
+export default function ProfileForm({ profile }: { profile: Profile }) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
