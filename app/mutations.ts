@@ -5,7 +5,7 @@ type NewEntry = Database["public"]["Tables"]["species"]["Insert"];
 
 export async function addEntry(input: NewEntry) {
   const supabase = createClientComponentClient<Database>();
-  await supabase.from("species").insert([
+  return await supabase.from("species").insert([
     {
       author: input.author,
       common_name: input.common_name,
