@@ -3,7 +3,7 @@
 -- Create a table for public profiles
 create table profiles (
   id uuid references auth.users not null primary key,
-  email text unique,
+  email text unique not null,
   display_name text,
   biography text
 );
