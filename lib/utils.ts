@@ -1,3 +1,5 @@
+// Add util functions that can be used in both server and client components.
+// For more info on how to avoid poisoning your server/client components: https://www.youtube.com/watch?v=BZlwtR9pDp4
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
