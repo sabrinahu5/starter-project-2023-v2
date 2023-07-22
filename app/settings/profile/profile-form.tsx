@@ -23,12 +23,16 @@ const profileFormSchema = z.object({
       message: "Username must not be longer than 30 characters.",
     }),
   email: z.string().email().optional(), // Is there better way to handle read-only?
-  bio: z.string().max(160).min(4),
+  bio: z
+    .string()
+    .max(160, {
+      message: "Biography cannot be longer than 160 characters.",
+    })
+    .optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-// * Note to Ashley: You can grab database types by indexing through the schema as shown below. Note that you can also get other kinds of operations beside just "row" reads.
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 export default function ProfileForm({ profile }: { profile: Profile }) {
@@ -36,7 +40,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       username: profile.display_name ?? undefined,
-      bio: profile.biography ?? undefined, // only doing this because type error
+      bio: profile.biography ?? undefined, // Reassigns a potential `null` value from the Supabase schema to the expected `undefined` for react-hook-form
     },
     mode: "onChange",
   });
@@ -72,20 +76,14 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input readOnly placeholder={profile.email} {...field} />
-              </FormControl>
-              <FormDescription>This is your verified email address.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input readOnly placeholder={profile.email} />
+          </FormControl>
+          <FormDescription>This is your verified email address.</FormDescription>
+          <FormMessage />
+        </FormItem>
         <FormField
           control={form.control}
           name="bio"

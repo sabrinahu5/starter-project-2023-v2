@@ -42,7 +42,7 @@ export default function UserNav({ session }: { session: Session | null }) {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             {/* <AvatarImage src="/avatars/01.png" alt="@shadcn" /> */}
-            <AvatarFallback>{session.user.email?.slice(0, 1).toUpperCase()}</AvatarFallback>
+            <AvatarFallback>{session.user.email?.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
