@@ -1,5 +1,5 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { UserAuthForm } from "./user-auth-form";
+import UserAuthForm from "./user-auth-form";
 import { type Database } from "@/lib/schema";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
