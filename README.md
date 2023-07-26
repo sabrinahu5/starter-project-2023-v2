@@ -8,8 +8,6 @@
     - [Supabase Connection Setup](#supabase-connection-setup)
     - [Supabase CLI Setup](#supabase-cli-setup)
     - [Run the webapp](#run-the-webapp)
-    - [(Recommended) Configure git message template](#recommended-configure-git-message-template)
-    - [Github CI workflow (for SSWEs, do during project setup)](#github-ci-workflow-for-sswes-do-during-project-setup)
   - [Stack references](#stack-references)
     - [Typescript](#typescript)
     - [Components and Styling: `shadcn/ui`, Radix, and Tailwind CSS](#components-and-styling-shadcnui-radix-and-tailwind-css)
@@ -31,14 +29,6 @@
       - [Live Share](#live-share)
       - [Format Code Action](#format-code-action)
   - [Deployment guides](#deployment-guides)
-  - [Additional stack options (for SSWEs)](#additional-stack-options-for-sswes)
-    - [Component libraries](#component-libraries)
-    - [User Auth](#user-auth)
-    - [Data fetching and other backend tools](#data-fetching-and-other-backend-tools)
-    - [Testing frameworks](#testing-frameworks)
-    - [Databases](#databases)
-    - [Realtime options](#realtime-options)
-    - [The T3 Stack](#the-t3-stack)
 
 ---
 
@@ -145,33 +135,6 @@ You can run the webapp with the following terminal command:
 # Start the webapp in development mode (usually what you do in development). Exit with Ctrl + C
 npm run dev
 ```
-
-#### (Recommended) Configure git message template
-
-This project also includes a template for writing good git commit messages. You can configure this template (affects only the project repo) using the following terminal command:
-
-```bash
-# Set git commit message to the .gitmessage file (this only affects git in the project repo, not globally)
-git config commit.template .gitmessage
-```
-
-In future commits, you can run `git commit` (with no attached message or `-m` tag) to open the commit message template in VSCode. Fill in the blanks, save the file (`cmd + S`), and close the file (`cmd + W`) to finish the commit.
-
-#### Github CI workflow (for SSWEs, do during project setup)
-
-We implemented a [Github Actions](https://docs.github.com/en/actions) workflow for CI ([continuous integration](<https://www.atlassian.com/continuous-delivery/continuous-integration#:~:text=Continuous%20integration%20(CI)%20is%20the,builds%20and%20tests%20then%20run.>)) that will process any pull requests made to `main`. The workflow auto-formats the code in the pull request with `prettier` and checks for any `eslint` errors. This allows SWEs to freely make commits on side branches (without enforced formatting or linting) but still prevents code with poor quality or formatting from being pushed to `main`. To set this up, do the following steps:
-
-1. In Github, go to Actions > Enable all workflows
-2. Go to Settings > Actions > General and under "Workflow Permissions", make sure "Read and write permissions" is selected.
-3. Create a dummy branch with a trivial edit (try not to add anything that creates a bug), and create a pull request from that branch to `main`. If you forked the starter project repo, make sure you're pull-requesting into the correct repo (your own)! After creating the pull request, you should see "Some checks haven't completed yet". Wait for the check to finish, it should succeed.
-4. Now we can create a Github [branch protection rule](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule) for our `main` branch. Go to Settings > Branches > Add branch protection rule. We recommend using the following settings:
-   - Branch name pattern: `main`
-   - Require a pull request before merging
-     - Require approvals (1)
-     - Dismiss stale pull request approvals when new commits are pushed
-   - Require status checks to pass before merging
-     - Require branches to be up to date before merging
-     - **Required status checks: "Format source code and check for linting errors"** (important to get our CI workflow to run!)
 
 ---
 
@@ -412,56 +375,3 @@ Allows us to run `eslint` after `prettier` on save, which is the fastest order.
 ## Deployment guides
 
 Deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker). The easiest way to deploy is with Vercel, which was created by the creators of Next.js!
-
----
-
-## Additional stack options (for SSWEs)
-
-There's no one-size-fits-all solution to web development. This project is meant to give you a highly flexible platform for starting a webapp, so feel free to swap out any of the stack components or add additional ones! Here are some recommendations below.
-
-### Component libraries
-
-- [Daisy UI](https://daisyui.com) and [Flowbite](https://flowbite.com): Component libraries built on Tailwind CSS.
-- [Tanstack](https://tanstack.com) provides some great libraries for rendering charts, tables, and lists
-
-### User Auth
-
-- [NextAuth.js](https://next-auth.js.org)
-- [Clerk](https://clerk.com)
-
-### Data fetching and other backend tools
-
-- [SWR](https://swr.vercel.app): React hooks for data fetching. Recommended by Next.js!
-- [Tanstack Query](https://tanstack.com/query/latest): React hooks for data fetching. Provides more features than SWR but is also a bit more complex. It's one of the most popular data fetching packages for React apps.
-- [Apollo Client](https://www.apollographql.com/docs/react/): A state management library for querying GraphQL APIs
-- [tRPC](https://trpc.io): Allows us to build and consume typesafe APIs from our Next.js backend (API routes) without schemas or code generation
-- [Prisma](https://www.prisma.io): A Typescript ORM ([object-relational mapping](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)) that allows you to query and manage your database in a typesafe manner
-- [Kysely](https://kysely.dev): A typesafe and auto-completion friendly SQL query builder for Typescript. It's a more lightweight typesafety solution than Prisma.
-- [Drizzle](https://orm.drizzle.team): Another Typescript ORM that is more lightweight than Prisma, albeit newer.
-
-### Testing frameworks
-
-You [may not](https://www.youtube.com/watch?v=ZGKGb109-I4) need to write tests for your project, but if you do, check out [Cypress](https://www.cypress.io)! It's a great end-to-end testing framework that is visual and easy to work with.
-
-### Databases
-
-Here is a great [guide](https://www.youtube.com/watch?v=cC6HFd1zcbo) on picking databases.
-
-One of the big questions to ask when choosing a database is: "Do I need easy realtime functionality?" Specifically, realtime is the ability for your webapp to be notified of changes to the database such that you can "subscribe" to it. Note that this is **NOT** just the ability for your app to update its data without a page refresh; we can easily get the client to update/refetch its data whenever the **user** makes a change, or intermittently poll a data source to check for updates. Realtime functionality provides, for instance, a way for a user's client to update its data without a page refresh when a change happens outside of the user's client (say, some other user makes a change).
-
-- [Firestore/Firebase](Firestore/Firebase): Similar to Supabase. Its main draw is that it's very popular, has great documentation, and has a lot of other features. The downside is that the Firestore database is propietary (thus very hard to migrate off of) and non-relational (which presents challenges with typesafety and data consistency). If you're going to use Firestore, you should probably also check out [Fireschema](https://github.com/yarnaimo/fireschema) or [Typesaurus](https://github.com/kossnocorp/typesaurus), which will help address the typesafety issues with native Firestore.
-- [Pocketbase](https://pocketbase.io): An open-source backend that (like Supabase and Firebase) provides a realtime database, auth, and file storage. It doesn't have as expansive features as Supabase/Firebase, but it's super lightweight, stores data locally, and is easily self hostable! If you know for sure you won't need the more advanced features of Supabase/Firebase (ex: edge functions) this is a great Supabase alternative.
-- [Planetscale](https://planetscale.com): Relational database platform that allows you to manage your database history with a flow similar to `git` branching. It supposedly integrates really well with tRPC and Prisma in the T3 stack (below). However, no easy realtime functionality like with Supabase/Firebase!
-
-Realtime functionality is accomplished really easily with Supabase and Firebase, but it can still be accomplished with other databases that don't have built-in realtime functionality. You will need to use [webhooks](https://zapier.com/blog/what-are-webhooks/#). This may require a dedicated backend for your app (such as through [Express](https://expressjs.com)), or you can use one of the other options for realtime functionality (options below).
-
-### Realtime options
-
-- [Redis](https://redis.com)
-- [Kafka](https://kafka.apache.org)
-- [Soketi](https://docs.soketi.app)
-- [Hop](https://docs.hop.io/getting-started/introduction)
-
-### The T3 Stack
-
-The [T3 stack](https://create.t3.gg) is a popular stack for web development that focuses heavily on full-staack typesafety and providing a great developer experience. However, as of early June 2023, the T3 stack still uses the Next.js `pages` router (the traditional paradigm for Next.js development) and may [take some time](https://github.com/t3-oss/create-t3-app/issues/1364) to migrate over to the new `app` router. It's also worth noting that Firebase and Supabase don't integrate super well into Prisma, a key component of the stack, based on anecdotal knowledge from the Supabase Discord and this incredibly complicated [Medium article](https://medium.com/@ngoctranfire/using-prisma-with-supabase-row-level-security-and-multi-schema-7c53418adba3). If you're okay with using the `pages` router and don't need realtime, then the T3 stack might be an excellent option! Just note that the learning curve is a bit high at first because you have to get used to tRPC and Prisma.
