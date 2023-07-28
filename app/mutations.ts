@@ -9,10 +9,8 @@ export async function addEntry(input: NewEntry) {
     {
       author: input.author,
       common_name: input.common_name,
-      continents: input.continents,
       description: input.description,
       kingdom: input.kingdom,
-      oceans: input.oceans,
       scientific_name: input.scientific_name,
       total_population: input.total_population,
       image: input.image,

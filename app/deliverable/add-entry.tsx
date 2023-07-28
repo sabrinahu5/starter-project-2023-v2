@@ -20,7 +20,7 @@ import { useState, type BaseSyntheticEvent } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import { type z } from "zod";
-import { continentOptions, kingdomOptions, oceanOptions, speciesSchema } from "../../lib/types";
+import { kingdomOptions, speciesSchema } from "../../lib/types";
 import { addEntry } from "../mutations";
 
 export default function AddEntry({ userId }: { userId: string }) {
@@ -108,42 +108,6 @@ export default function AddEntry({ userId }: { userId: string }) {
                 )}
               />
               {errors.kingdom && <span className="mt-2 block text-red-500">{errors.kingdom.message}</span>}
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="continents">Continent</Label>
-              <Controller
-                control={control}
-                name="continents"
-                render={({ field: { onChange, value, ref } }) => (
-                  <Select
-                    className="text-sm"
-                    ref={ref}
-                    value={continentOptions.filter((c) => value?.includes(c.value))}
-                    onChange={(val) => onChange(val.map((c) => c.value))}
-                    options={continentOptions}
-                    isMulti
-                  />
-                )}
-              />
-              {errors.continents && <span className="mt-2 block text-red-500">{errors.continents.message}</span>}
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="oceans">Ocean</Label>
-              <Controller
-                control={control}
-                name="oceans"
-                render={({ field: { onChange, value, ref } }) => (
-                  <Select
-                    className="text-sm"
-                    ref={ref}
-                    value={oceanOptions.filter((c) => value?.includes(c.value))}
-                    onChange={(val) => onChange(val.map((c) => c.value))}
-                    options={oceanOptions}
-                    isMulti
-                  />
-                )}
-              />
-              {errors.oceans && <span className="mt-2 block text-red-500">{errors.oceans.message}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="total_population">Total Population</Label>

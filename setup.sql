@@ -35,8 +35,6 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
-create type continent as enum ('North America', 'South America', 'Europe', 'Africa', 'Asia', 'Australia', 'Antarctica');
-create type ocean as enum ('Pacific', 'Atlantic', 'Indian', 'Arctic', 'Southern');
 create type kingdom as enum ('Animalia', 'Plantae', 'Fungi', 'Protista', 'Archaea', 'Bacteria');
 
 -- Create a table for species
@@ -45,8 +43,6 @@ create table species (
   scientific_name text unique not null,
   common_name text,
   total_population int,
-  continents continent[],
-  oceans ocean[],
   kingdom kingdom not null,
   description text,
   author uuid not null references profiles
