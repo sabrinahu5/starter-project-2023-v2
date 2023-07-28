@@ -10,34 +10,37 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState, type BaseSyntheticEvent } from "react";
-import { Controller, useForm } from "react-hook-form";
-import Select from "react-select";
+import { useForm } from "react-hook-form";
 import { type z } from "zod";
-import { kingdomOptions, speciesSchema } from "../../lib/types";
+import { kingdoms, speciesSchema } from "../../lib/types";
 import { addEntry } from "../mutations";
+
+type FormData = z.infer<typeof speciesSchema>;
+
+const defaultValues: Partial<FormData> = {
+  kingdom: "Animalia",
+};
 
 export default function AddEntry({ userId }: { userId: string }) {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
 
-  type FormData = z.infer<typeof speciesSchema>;
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<FormData>({
+  const form = useForm<FormData>({
     resolver: zodResolver(speciesSchema),
+    defaultValues,
+    mode: "onChange",
   });
 
   const onSubmit = async (input: FormData) => {
+    console.log(input);
+    return;
     const { error } = await addEntry({ ...input, author: userId });
     if (error) {
       return toast({
@@ -68,87 +71,126 @@ export default function AddEntry({ userId }: { userId: string }) {
             Add a new species here. Click &quot;Add Entry&quot; below when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={(e: BaseSyntheticEvent) => void handleSubmit(onSubmit)(e)}>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="scientific_name">
-                Scientific Name
-                <span className="text-sm italic text-red-500">* {errors.scientific_name && "Required"}</span>
-              </Label>
-              <Input id="scientific_name" placeholder="Cavia porcellus" {...register("scientific_name")} />
-              {/*errors.scientific_name && (
-                <span className="mt-2 block text-red-500">{errors.scientific_name?.message}</span>
-              )*/}
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="common_name">Common Name</Label>
-              <Input id="common_name" placeholder="Guinea Pig" {...register("common_name")} />
-              <span className="mt-2 block text-red-500">{errors.common_name?.message}</span>
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="kingdom">
-                Kingdom <span className="text-sm italic text-red-500">* {errors.kingdom && "Required"}</span>
-              </Label>
-              <Controller
-                control={control}
-                name="kingdom"
-                defaultValue={kingdomOptions[0]?.value}
-                render={({ field: { onChange, value, ref } }) => (
-                  <Select
-                    className="text-sm"
-                    ref={ref}
-                    value={kingdomOptions.find((c) => c.value === value)}
-                    onChange={(val) => {
-                      if (val) {
-                        onChange(val.value);
-                      }
-                    }}
-                    options={kingdomOptions}
-                  />
+        <Form {...form}>
+          <form onSubmit={(e: BaseSyntheticEvent) => void form.handleSubmit(onSubmit)(e)}>
+            <div className="grid w-full items-center gap-4">
+              <FormField
+                control={form.control}
+                name="scientific_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Scientific Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Cavia porcellus" {...field} />
+                    </FormControl>
+                    <FormDescription>The scientific name of the species.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
                 )}
               />
-              {errors.kingdom && <span className="mt-2 block text-red-500">{errors.kingdom.message}</span>}
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="total_population">Total Population</Label>
-              <Input
-                id="total_population"
-                placeholder="300000"
-                type="number"
-                {...register("total_population", {
-                  setValueAs: (value: string) => (value === "" ? undefined : parseInt(value) ?? undefined),
-                })}
+              <FormField
+                control={form.control}
+                name="common_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Common Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Guinea pig" {...field} />
+                    </FormControl>
+                    <FormDescription>The scientific name of the species.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              {errors.total_population && (
-                <span className="mt-2 block text-red-500">{errors.total_population.message}</span>
-              )}
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="image">Image URL</Label>
-              <Input
-                id="image"
-                placeholder="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/George_the_amazing_guinea_pig.jpg/440px-George_the_amazing_guinea_pig.jpg"
-                {...register("image")}
+              <FormField
+                control={form.control}
+                name="kingdom"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Kingdom</FormLabel>
+                    <Select onValueChange={(value) => field.onChange(kingdoms.parse(value))} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a kingdom" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectGroup>
+                          {kingdoms.options.map((kingdom, index) => (
+                            <SelectItem key={index} value={kingdom}>
+                              {kingdom}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>The kingdom in which the species belongs.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              {errors.image && <span className="mt-2 block text-red-500">{errors.image.message}</span>}
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                placeholder="The guinea pig or domestic guinea pig, also known as the cavy or domestic cavy, is a species of rodent belonging to the genus Cavia in the family Caviidae."
-                {...register("description")}
+              <FormField
+                control={form.control}
+                name="total_population"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Total population</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="300000"
+                        {...field}
+                        onChange={(event) => field.onChange(+event.target.value)}
+                      />
+                    </FormControl>
+                    <FormDescription>The total global population of the species.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              {errors.description && <span className="mt-2 block text-red-500">{errors.description.message}</span>}
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Image URL</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/George_the_amazing_guinea_pig.jpg/440px-George_the_amazing_guinea_pig.jpg"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>Upload a URL to an image of the species.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="The guinea pig or domestic guinea pig, also known as the cavy or domestic cavy, is a species of rodent belonging to the genus Cavia in the family Caviidae."
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>Write a short description of the species.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="float-right m-3">
+                Add Entry
+              </Button>
+              <Button type="button" className="float-right m-3" variant="secondary" onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
             </div>
-          </div>
-          <Button type="submit" className="float-right m-3">
-            Add Entry
-          </Button>
-          <Button type="button" className="float-right m-3" variant="secondary" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
