@@ -39,9 +39,8 @@ export default function AddEntry({ userId }: { userId: string }) {
   });
 
   const onSubmit = async (input: FormData) => {
-    console.log(input);
-    return;
     const { error } = await addEntry({ ...input, author: userId });
+
     if (error) {
       return toast({
         title: "Something went wrong.",
