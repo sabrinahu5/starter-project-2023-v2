@@ -56,7 +56,7 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
    ```bash
    # Navigate into the project directory
-   cd starter-project-2023-v2.git
+   cd starter-project-2023-v2
 
    # Open in VSCode
    code .
