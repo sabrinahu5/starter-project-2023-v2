@@ -113,7 +113,7 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
 2. If you've done `npm install`, the CLI should already be installed. You can test it by running `npx supabase`, which will give you a version (`Supabase CLI 1.64.8`) and a list of commands.
 
-3. We preconfigured a command (in `package.json`) for you to easily generate type definitions in `lib/schema.ts` from your remote Supabase database schema. If you've created tables in Supabase, you can test this command now. Otherwise, make sure to run it frequently in development whenever you edit your database schema.
+3. We preconfigured a command (in `package.json`) for you to easily generate type definitions in `lib/schema.ts` from your remote Supabase database schema. If you've created tables in Supabase, you can test this command now. Otherwise, make sure to run it in development whenever you edit your database schema.
 
    ```ts
    // Introspects your remote Supabase database and generates types in lib/schema.ts
@@ -204,7 +204,7 @@ npm start
 
 Note that React 18 introduced server components, which form a new paradigm for conceptualizing and constructing webapps. This project uses the Next.js `app/` router, which was introduced in Next.js 13 and uses React server components. Server components are very new and can take a while to wrap one's head around (especially for people already accustomed to React's old "mental model"). However, React and Next.js development is shifting towards this new paradigm, just like how we shifted from using class components and lifecycle methods to using functional components and hooks in React a few years ago. So we at T4SG Eng want to move along with the rest of the developer community and ensure that we're learning/practicing the most relevant skills!
 
-If you are new to React, check out the React documentation first before touching Next.js. The Next.js docs have a great [React Essentials](https://nextjs.org/docs/getting-started/react-essentials) section. When browsing documentation or looking at tutorials for Next.js, try to first look for examples explicitly referencing Next 13 or the `app` router, not the `pages` router (which is the traditional way of building Next.js webapps). However, this **does not** mean that `pages`-related content is obsolete! The `app` router uses a balance of server components and client components (more on this in the docs), and client components have the same functionality as components in the `pages` router have always had.
+If you are new to React, check out the React documentation first before touching Next.js. The Next.js docs have a great [React Essentials](https://nextjs.org/docs/getting-started/react-essentials) section. When browsing documentation or looking at tutorials for Next.js, try to first look for examples explicitly referencing Next 13 or the `app` router, not the `pages` router (which is the older way of building Next.js webapps).
 
 > **More references**
 >
