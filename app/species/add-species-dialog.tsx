@@ -10,9 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -28,7 +29,7 @@ const defaultValues: Partial<FormData> = {
   kingdom: "Animalia",
 };
 
-export default function AddEntry({ userId }: { userId: string }) {
+export default function AddSpeciesDialog({ userId }: { userId: string }) {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -49,10 +50,8 @@ export default function AddEntry({ userId }: { userId: string }) {
       });
     }
 
-    await addEntry({ ...input, author: userId }).then(() => {
-      setOpen(false);
-      router.refresh();
-    });
+    setOpen(false);
+    router.refresh();
   };
 
   return (
@@ -82,7 +81,6 @@ export default function AddEntry({ userId }: { userId: string }) {
                     <FormControl>
                       <Input placeholder="Cavia porcellus" {...field} />
                     </FormControl>
-                    <FormDescription>The scientific name of the species.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -96,7 +94,6 @@ export default function AddEntry({ userId }: { userId: string }) {
                     <FormControl>
                       <Input placeholder="Guinea pig" {...field} />
                     </FormControl>
-                    <FormDescription>The scientific name of the species.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -107,6 +104,7 @@ export default function AddEntry({ userId }: { userId: string }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Kingdom</FormLabel>
+                    {/* Using shadcn/ui form with enum: https://github.com/shadcn-ui/ui/issues/772 */}
                     <Select onValueChange={(value) => field.onChange(kingdoms.parse(value))} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -123,7 +121,6 @@ export default function AddEntry({ userId }: { userId: string }) {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
-                    <FormDescription>The kingdom in which the species belongs.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -135,6 +132,7 @@ export default function AddEntry({ userId }: { userId: string }) {
                   <FormItem>
                     <FormLabel>Total population</FormLabel>
                     <FormControl>
+                      {/* Using shadcn/ui form with number: https://github.com/shadcn-ui/ui/issues/421 */}
                       <Input
                         type="number"
                         placeholder="300000"
@@ -142,7 +140,6 @@ export default function AddEntry({ userId }: { userId: string }) {
                         onChange={(event) => field.onChange(+event.target.value)}
                       />
                     </FormControl>
-                    <FormDescription>The total global population of the species.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -159,7 +156,6 @@ export default function AddEntry({ userId }: { userId: string }) {
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>Upload a URL to an image of the species.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -171,22 +167,28 @@ export default function AddEntry({ userId }: { userId: string }) {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input
+                      <Textarea
                         placeholder="The guinea pig or domestic guinea pig, also known as the cavy or domestic cavy, is a species of rodent belonging to the genus Cavia in the family Caviidae."
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>Write a short description of the species.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="float-right m-3">
-                Add Entry
-              </Button>
-              <Button type="button" className="float-right m-3" variant="secondary" onClick={() => setOpen(false)}>
-                Cancel
-              </Button>
+              <div className="flex">
+                <Button type="submit" className="ml-1 mr-1 flex-auto">
+                  Add Entry
+                </Button>
+                <Button
+                  type="button"
+                  className="ml-1 mr-1 flex-auto"
+                  variant="secondary"
+                  onClick={() => setOpen(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </form>
         </Form>

@@ -1,8 +1,10 @@
-export function TypographyH1({ children }: { children: string }) {
+import { type ReactNode } from "react";
+
+export function TypographyH1({ children }: { children: ReactNode }) {
   return <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">{children}</h1>;
 }
 
-export function TypographyH2({ children }: { children: string }) {
+export function TypographyH2({ children }: { children: ReactNode }) {
   return (
     <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
       {children}
@@ -10,19 +12,19 @@ export function TypographyH2({ children }: { children: string }) {
   );
 }
 
-export function TypographyH3({ children }: { children: string }) {
+export function TypographyH3({ children }: { children: ReactNode }) {
   return <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">{children}</h3>;
 }
 
-export function TypographyH4({ children }: { children: string }) {
+export function TypographyH4({ children }: { children: ReactNode }) {
   return <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">{children}</h4>;
 }
 
-export function TypographyP({ children }: { children: string }) {
+export function TypographyP({ children }: { children: ReactNode }) {
   return <p className="leading-7 [&:not(:first-child)]:mt-6">{children}</p>;
 }
 
-export function TypographyBlockquote({ children }: { children: string }) {
+export function TypographyBlockquote({ children }: { children: ReactNode }) {
   return <blockquote className="mt-6 border-l-2 pl-6 italic">{children}</blockquote>;
 }
 
@@ -80,7 +82,7 @@ export function TypographyList({ items }: { items: string[] }) {
   );
 }
 
-export function TypographyInlineCode({ children }: { children: string }) {
+export function TypographyInlineCode({ children }: { children: ReactNode }) {
   return (
     <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
       {children}
@@ -88,34 +90,34 @@ export function TypographyInlineCode({ children }: { children: string }) {
   );
 }
 
-export function TypographyLead({ children }: { children: string }) {
+export function TypographyLead({ children }: { children: ReactNode }) {
   return <p className="text-xl text-muted-foreground">{children}</p>;
 }
 
-export function TypographyLarge({ children }: { children: string }) {
+export function TypographyLarge({ children }: { children: ReactNode }) {
   return <div className="text-lg font-semibold">{children}</div>;
 }
 
-export function TypographySmall({ children }: { children: string }) {
+export function TypographySmall({ children }: { children: ReactNode }) {
   return <small className="text-sm font-medium leading-none">{children}</small>;
 }
 
-export function TypographyMuted({ children }: { children: string }) {
+export function TypographyMuted({ children }: { children: ReactNode }) {
   return <p className="text-sm text-muted-foreground">{children}</p>;
 }
 
-export function PageHeader1({ children }: { children: string }) {
+export function PageHeader1({ children }: { children: ReactNode }) {
   return <h2 className="text-2xl font-bold tracking-tight">{children}</h2>;
 }
 
-export function PageSubHeader1({ children }: { children: string }) {
+export function PageSubHeader1({ children }: { children: ReactNode }) {
   return <p className="text-muted-foreground">{children}</p>;
 }
 
-export function PageHeader2({ children }: { children: string }) {
+export function PageHeader2({ children }: { children: ReactNode }) {
   return <h3 className="text-lg font-medium">{children}</h3>;
 }
 
-export function PageSubHeader2({ children }: { children: string }) {
+export function PageSubHeader2({ children }: { children: ReactNode }) {
   return <p className="text-sm text-muted-foreground">{children}</p>;
 }

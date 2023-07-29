@@ -3,7 +3,7 @@ import type { Database } from "@/lib/schema";
 import Image from "next/image";
 type Species = Database["public"]["Tables"]["species"]["Row"];
 
-export default function Card(species: Species) {
+export default function SpeciesCard(species: Species) {
   return (
     <div className="min-w-72 m-4 w-72 flex-none rounded border-2 p-3 shadow">
       {species.image && (

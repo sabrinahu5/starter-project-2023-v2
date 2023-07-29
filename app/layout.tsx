@@ -6,8 +6,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata = {
-  title: "T4SG Deliverable",
-  description: "T4SG Deliverable for Fall 2023 Application Season.",
+  title: "T4SG Biodiversity Hub",
+  description: "T4SG Deliverable for Fall 2023 Applications.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

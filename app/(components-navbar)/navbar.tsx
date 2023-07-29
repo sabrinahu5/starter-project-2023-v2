@@ -13,11 +13,11 @@ export default async function Navbar({ className, ...props }: React.HTMLAttribut
   return (
     <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)} {...props}>
       <Link href="/" className="text-sm font-medium transition-colors hover:text-primary">
-        Instructions
+        Home
       </Link>
       {session && (
-        <Link href="/deliverable" className="text-sm font-medium transition-colors hover:text-primary">
-          Deliverable
+        <Link href="/species" className="text-sm font-medium transition-colors hover:text-primary">
+          Species
         </Link>
       )}
     </nav>
