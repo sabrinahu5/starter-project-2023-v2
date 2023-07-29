@@ -113,7 +113,7 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
 2. If you've done `npm install`, the CLI should already be installed. You can test it by running `npx supabase`, which will give you a version (`Supabase CLI 1.64.8`) and a list of commands.
 
-3. We preconfigured a command (in `package.json`) for you to easily generate type definitions in `lib-schema.ts` from your remote Supabase database schema. If you've created tables in Supabase, you can test this command now. Otherwise, make sure to run it frequently in development whenever you edit your database schema.
+3. We preconfigured a command (in `package.json`) for you to easily generate type definitions in `lib/schema.ts` from your remote Supabase database schema. If you've created tables in Supabase, you can test this command now. Otherwise, make sure to run it frequently in development whenever you edit your database schema.
 
    ```ts
    // Introspects your remote Supabase database and generates types in lib/schema.ts
