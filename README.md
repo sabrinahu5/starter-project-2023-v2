@@ -6,6 +6,7 @@
       - [Clone repository](#clone-repository)
       - [Package installation](#package-installation)
       - [Supabase Connection Setup](#supabase-connection-setup)
+      - [Supabase Database Setup](#supabase-database-setup)
       - [Supabase CLI Setup](#supabase-cli-setup)
       - [Run the webapp](#run-the-webapp)
       - [(Recommended) Configure git message template](#recommended-configure-git-message-template)
@@ -116,6 +117,12 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
    ```
 
    You should not share these keys publically, especially the `SECRET_SUPABASE_CONNECTION_STRING`. Note that this project uses a package from the popular [T3 stack](https://create.t3.gg/) to validate and provide typesafety to environment variables in `env.mjs` (more on this below). When using these environment variables in your code, you can import them from `env.mjs`. `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are used in the codebase itself and are thus included in this file. `SECRET_SUPABASE_CONNECTION_STRING` is used only in a helper script in `package.json` and not in the app itself, so it doesn't need to be validated.
+
+#### Supabase Database Setup
+
+1. In your Supabase project dashboard, navigate to `SQL Editor` in the left sidebar, then click `(+) New Query` > `New blank query`. If you wish, you can rename the query from "Untitled Query" to something else by clicking the dropdown in the left sidebar.
+2. In your starter code, there is a `setup.sql` file containing a SQL script that will set up the database for you. Copy the entire contents of the file and paste it into your new query.
+3. Run the query with the button in the bottom right or by pressing `cmd` + `return`. In the results panel, you should see the message `Success. No rows returned`.
 
 #### Supabase CLI Setup
 
