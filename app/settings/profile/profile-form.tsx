@@ -1,18 +1,17 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
-import { type BaseSyntheticEvent } from "react";
+import { type Database } from "@/lib/schema";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useState, type BaseSyntheticEvent } from "react";
 
 const profileFormSchema = z.object({
   username: z
@@ -22,52 +21,66 @@ const profileFormSchema = z.object({
     })
     .max(30, {
       message: "Username must not be longer than 30 characters.",
-    }),
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
     })
-    .email(),
-  bio: z.string().max(160).min(4),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
-      }),
-    )
-    .optional(),
+    .transform((val) => val.trim()),
+  bio: z
+    .string()
+    .max(160, {
+      message: "Biography cannot be longer than 160 characters.",
+    })
+    .nullable()
+    // Transform empty string or only whitespace input to null before form submission
+    .transform((val) => (val?.trim() === "" ? null : val?.trim())),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-  bio: "I own a computer.",
-  urls: [{ value: "https://shadcn.com" }, { value: "http://twitter.com/shadcn" }],
-};
+type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
-export function ProfileForm() {
+export default function ProfileForm({ profile }: { profile: Profile }) {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const defaultValues = {
+    username: profile.display_name,
+    bio: profile.biography,
+  };
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
   });
 
-  const { fields, append } = useFieldArray({
-    name: "urls",
-    control: form.control,
-  });
+  const onSubmit = async (data: ProfileFormValues) => {
+    const supabase = createClientComponentClient<Database>();
+    const { error } = await supabase
+      .from("profiles")
+      .update({ biography: data.bio, display_name: data.username })
+      .eq("id", profile.id);
 
-  function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+    if (error) {
+      return toast({
+        title: "Something went wrong.",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+
+    setIsEditing(false);
+
+    // Reset form values to the data values that have been processed by zod.
+    // This way the user sees any changes that have occurred during transformation
+    form.reset(data);
+
+    return toast({
+      title: "Profile updated successfully!",
     });
-  }
+  };
+
+  const handleCancel = () => {
+    form.reset(defaultValues);
+    setIsEditing(false);
+  };
 
   return (
     <Form {...form}>
@@ -79,82 +92,61 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input readOnly={!isEditing} placeholder="Username" {...field} />
               </FormControl>
               <FormDescription>
-                This is your public display name. It can be your real name or a pseudonym. You can only change this once
-                every 30 days.
+                This is your public display name. It can be your real name or a pseudonym.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                You can manage verified email addresses in your <Link href="/examples/forms">email settings</Link>.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input readOnly placeholder={profile.email} />
+          </FormControl>
+          <FormDescription>This is your verified email address.</FormDescription>
+          <FormMessage />
+        </FormItem>
         <FormField
           control={form.control}
           name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bio</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Tell us a little bit about yourself" className="resize-none" {...field} />
-              </FormControl>
-              <FormDescription>
-                You can <span>@mention</span> other users and organizations to link to them.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          render={({ field }) => {
+            // We must extract value from field and convert a potential defaultValue of `null` to "" because textareas can't handle null values: https://github.com/orgs/react-hook-form/discussions/4091
+            const { value, ...rest } = field;
+            return (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea
+                    readOnly={!isEditing}
+                    value={value || ""}
+                    placeholder="Tell us a little bit about yourself"
+                    className="resize-none"
+                    {...rest}
+                  />
+                </FormControl>
+                <FormDescription>
+                  You can <span>@mention</span> other users and organizations to link to them.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
         />
-        <div>
-          {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>URLs</FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Add links to your website, blog, or social media profiles.
-                  </FormDescription>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => append({ value: "" })}>
-            Add URL
-          </Button>
-        </div>
-        <Button type="submit">Update profile</Button>
+        {isEditing ? (
+          <>
+            <Button type="submit" className="mr-2">
+              Update profile
+            </Button>
+            <Button variant="secondary" onClick={handleCancel}>
+              Cancel
+            </Button>
+          </>
+        ) : (
+          <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+        )}
       </form>
     </Form>
   );
