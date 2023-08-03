@@ -3,20 +3,20 @@
 - [T4SG Starter Project](#t4sg-starter-project)
   - [Introduction](#introduction)
   - [Setup](#setup)
-    - [Clone repository](#clone-repository)
-    - [Package installation](#package-installation)
-    - [Supabase Connection Setup](#supabase-connection-setup)
-    - [Supabase CLI Setup](#supabase-cli-setup)
-    - [Run the webapp](#run-the-webapp)
-    - [(Recommended) Configure git message template](#recommended-configure-git-message-template)
-    - [Github CI workflow (for SSWEs, do during project setup)](#github-ci-workflow-for-sswes-do-during-project-setup)
+      - [Clone repository](#clone-repository)
+      - [Package installation](#package-installation)
+      - [Supabase Connection Setup](#supabase-connection-setup)
+      - [Supabase CLI Setup](#supabase-cli-setup)
+      - [Run the webapp](#run-the-webapp)
+      - [(Recommended) Configure git message template](#recommended-configure-git-message-template)
+      - [Github CI workflow (for SSWEs, do during project setup)](#github-ci-workflow-for-sswes-do-during-project-setup)
   - [Stack references](#stack-references)
     - [Typescript](#typescript)
     - [Components and Styling: `shadcn/ui`, Radix, and Tailwind CSS](#components-and-styling-shadcnui-radix-and-tailwind-css)
     - [Next.js](#nextjs)
       - [Tips for learning:](#tips-for-learning)
     - [Supabase](#supabase)
-      - [Troubleshooting the Supabase CLI](#troubleshooting-the-supabase-cli)
+        - [Troubleshooting the Supabase CLI](#troubleshooting-the-supabase-cli)
     - [Environment variables](#environment-variables)
   - [Development tools](#development-tools)
     - [Code formatting and linting tools](#code-formatting-and-linting-tools)
@@ -66,12 +66,12 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
    ```bash
    # Navigate into the project directory
-   cd starter-project-2023-v2.git
+   cd starter-project-2023-v2
 
    # Open in VSCode
    code .
 
-   # If the second error gives you an error, you probably don't have the VS Code 'code' keyword added to your PATH variable. Follow this tutorial:
+   # If the second command gives you an error, you probably don't have the VS Code 'code' keyword added to your PATH variable. Follow this tutorial:
    # https://www.freecodecamp.org/news/how-to-open-visual-studio-code-from-your-terminal/#:~:text=Once%20your%20terminal%20is%20open,Then%20hit%20enter%20.&text=Once%20you%20hit%20enter%20%2C%20VS%20Code%20will%20now%20open.
    ```
 
@@ -85,10 +85,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   ```bash
   added 414 packages, and audited 415 packages in 13s
-  
+
   149 packages are looking for funding
   run `npm fund` for details
-  
+
   found 0 vulnerabilities
   ```
 
@@ -123,7 +123,7 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
 2. If you've done `npm install`, the CLI should already be installed. You can test it by running `npx supabase`, which will give you a version (`Supabase CLI 1.64.8`) and a list of commands.
 
-3. We preconfigured a command (in `package.json`) for you to easily generate type definitions in `lib-schema.ts` from your remote Supabase database schema. If you've created tables in Supabase, you can test this command now. Otherwise, make sure to run it frequently in development whenever you edit your database schema.
+3. We preconfigured a command (in `package.json`) for you to easily generate type definitions in `lib/schema.ts` from your remote Supabase database schema. If you've created tables in Supabase, you can test this command now. Otherwise, make sure to run it frequently in development whenever you edit your database schema.
 
    ```ts
    // Introspects your remote Supabase database and generates types in lib/schema.ts
@@ -241,7 +241,7 @@ npm start
 
 Note that React 18 introduced server components, which form a new paradigm for conceptualizing and constructing webapps. This project uses the Next.js `app/` router, which was introduced in Next.js 13 and uses React server components. Server components are very new and can take a while to wrap one's head around (especially for people already accustomed to React's old "mental model"). However, React and Next.js development is shifting towards this new paradigm, just like how we shifted from using class components and lifecycle methods to using functional components and hooks in React a few years ago. So we at T4SG Eng want to move along with the rest of the developer community and ensure that we're learning/practicing the most relevant skills!
 
-If you are new to React, check out the React documentation first before touching Next.js. The Next.js docs have a great [React Essentials](https://nextjs.org/docs/getting-started/react-essentials) section. When browsing documentation or looking at tutorials for Next.js, try to first look for examples explicitly referencing Next 13 or the `app` router, not the `pages` router (which is the traditional way of building Next.js webapps). However, this **does not** mean that `pages`-related content is obsolete! The `app` router uses a balance of server components and client components (more on this in the docs), and client components have the same functionality as components in the `pages` router have always had.
+If you are new to React, check out the React documentation first before touching Next.js. The Next.js docs have a great [React Essentials](https://nextjs.org/docs/getting-started/react-essentials) section. When browsing documentation or looking at tutorials for Next.js, try to first look for examples explicitly referencing Next 13 or the `app` router, not the `pages` router (which is the older way of building Next.js webapps).
 
 > **More references**
 >
