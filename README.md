@@ -86,10 +86,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   ```bash
   added 414 packages, and audited 415 packages in 13s
-
+  
   149 packages are looking for funding
   run `npm fund` for details
-
+  
   found 0 vulnerabilities
   ```
 
@@ -101,11 +101,15 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
 1. Visit the Supabase website, create an account (or login if you already have one), and create a new project. You will be prompted to set a **Database Password; remember it**. Wait for your database provisioning and setup to finish.
 
+   * Try to avoid using special characters like `?`, `$`, etc. in your password.
+
 2. Duplicate the `.env.example` file (into your root project directory) and rename to `.env`. Inside `.env`, set the following variables according to your Supabase project settings:
 
    - `NEXT_PUBLIC_SUPABASE_URL`: From Project Settings > API > Project URL.
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: From Project Settings > API > Project API Keys > `anon` `public`.
    - `SECRET_SUPABASE_CONNECTION_STRING`: From Project Settings > Database > Connection String > Nodejs. Replace `[YOUR-PASSWORD]` with your database password.
+     - If you insist on using special characters in your password you will need to replace them with the **percent-encoded** version ([see this reference](https://stackoverflow.com/a/76551917))
+
 
    The final result should look something like this:
 
