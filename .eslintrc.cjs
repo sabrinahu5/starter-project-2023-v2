@@ -1,28 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const path = require("path");
-
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true, // Ignores config files in parent directories
-  overrides: [
-    // https://eslint.org/docs/latest/use/configure/configuration-files
-    // It is possible to override settings based on file glob patterns in your configuration by using the overrides key.
-    {
-      extends: [
-        "plugin:@typescript-eslint/recommended-requiring-type-checking", // Ruleset here: https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/recommended-requiring-type-checking.ts
-      ],
-      files: ["*.ts", "*.tsx"],
-      parserOptions: {
-        project: path.join(__dirname, "tsconfig.json"),
-      },
-    },
-  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: path.join(__dirname, "tsconfig.json"),
+    project: true,
+    tsconfigRootDir: __dirname,
   },
   plugins: ["@typescript-eslint"],
-  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended", "prettier"], // an array of strings where each additional configuration extends the preceding configurations
+  extends: ["eslint:recommended", "next/core-web-vitals", "plugin:@typescript-eslint/recommended-type-checked", "plugin:@typescript-eslint/stylistic-type-checked", "prettier"], // an array of strings where each additional configuration extends the preceding configurations
+  // Reference for typescript-eslint: https://typescript-eslint.io/linting/configs
   // prettier/@typescript-eslint extension is no longer needed. https://stackoverflow.com/questions/65675771/eslint-couldnt-find-the-config-prettier-typescript-eslint-after-relocating
   rules: {
     "@typescript-eslint/consistent-type-imports": [

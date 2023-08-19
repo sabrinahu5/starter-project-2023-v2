@@ -127,7 +127,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
                 <FormControl>
                   <Textarea
                     readOnly={!isEditing}
-                    value={value || ""}
+                    value={value ?? ""}
                     placeholder="Tell us a little bit about yourself"
                     className="resize-none"
                     {...rest}
