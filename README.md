@@ -417,6 +417,14 @@ Allows us to run `eslint` after `prettier` on save, which is the fastest order.
 
 Deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker). The easiest way to deploy is with Vercel, which was created by the creators of Next.js!
 
+When deploying, make sure you set the appropriate environment variables for your deployment corresponding to those found in `.env`. That is, if you're using a separate Supabase project for production, use the environment variables for that project, but if you're just using your development database, you can paste in the contents of your local `.env` file.
+
+Additionally, you need to make sure you configure Supabase's redirect URLs to accept login requests from your deployed site. Specifically, it needs to accept `https://my-domain-name.com/auth/callback`, since Supabase redirects to the `/auth/callback` route after login. 
+
+The easiest way to do this is to login to your Supabase dashboard and navigate to Authentication (left sidebar) > URL Configuration > Redirect URLs > Add URL, and add the following URL: `https://my-domain-name.com/**`.
+
+Read more about it [here](https://supabase.com/docs/guides/auth#redirect-urls-and-wildcards).
+
 ---
 
 ## Additional stack options (for SSWEs)
