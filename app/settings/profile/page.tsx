@@ -1,8 +1,6 @@
 import { Separator } from "@/components/ui/separator";
-import { type Database } from "@/lib/schema";
+import { createServerSupabaseClient } from "@/lib/server-utils";
 import { getUserProfile } from "@/lib/utils";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import ProfileForm from "./profile-form";
 
@@ -16,7 +14,7 @@ function SettingsError({ message }: { message: string }) {
 }
 
 export default async function Settings() {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  const supabase = createServerSupabaseClient();
   const {
     data: { session },
   } = await supabase.auth.getSession();

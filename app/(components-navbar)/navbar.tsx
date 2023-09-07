@@ -1,12 +1,10 @@
-import { type Database } from "@/lib/schema";
+import { createServerSupabaseClient } from "@/lib/server-utils";
 import { cn } from "@/lib/utils";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import Link from "next/link";
 
 export default async function Navbar({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
   // Create supabase server component client and obtain user session from stored cookie
-  const supabase = createServerComponentClient<Database>({ cookies });
+  const supabase = createServerSupabaseClient();
   const {
     data: { session },
   } = await supabase.auth.getSession();
