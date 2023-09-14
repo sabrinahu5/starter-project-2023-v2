@@ -88,7 +88,7 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
 4. You should see a popup in the bottom right prompting you to install recommended extensions. Please install these, they'll be helpful for code formatting and developing the webapp. You can also view the recommended extensions in the extensions sidebar (`cmd + shift + X`.)
 
-5. You will also get a prompt to use the workspace's Typescript version; accept it. If you don't get one, or if you get an error that the path "does not point to a valid tsserver install", make sure you're using the workspace's Typescript version by pressing `cmd` + `shift` + `P` and typing "typescript", selecting `Typescript: Select Typescript Version`, and selecting `Use Workspace Version`.
+5. You will also get a prompt to use the workspace's Typescript version; accept it. You may have to navigate to any `.ts` or `.tsx` file in the project and open it to receive the prompt. If you don't get one, or if you get an error that the path "does not point to a valid tsserver install", make sure you're using the workspace's Typescript version by pressing `cmd` + `shift` + `P` and typing "typescript", selecting `Typescript: Select Typescript Version`, and selecting `Use Workspace Version`.
 
 #### Supabase Connection Setup
 
@@ -96,7 +96,7 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
    * Try to avoid using special characters like `?`, `$`, etc. in your password.
 
-2. Duplicate the `.env.example` file (into your root project directory) and rename to `.env`. Inside `.env`, set the following variables according to your Supabase project settings:
+2. There is a `.env.example` file in your local project directory (e.g. in VSCode). Duplicate it (into the same directory) and rename to `.env`. Inside `.env`, set the following variables according to your Supabase project settings:
 
    - `NEXT_PUBLIC_SUPABASE_URL`: From Project Settings > API > Project URL.
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: From Project Settings > API > Project API Keys > `anon` `public`.
@@ -143,11 +143,13 @@ More instructions on troubleshooting potential errors are below.
 
 #### Run the webapp
 
-You can run the webapp with the following terminal command:
+You can run the webapp with the following terminal command. By default, the webapp should be accessible at `http://localhost:3000/`.
 
 ```bash
 # Start the webapp in development mode (usually what you do in development). Exit with Ctrl + C
 npm run dev
+
+# You'll get several "compiling" messages after running this command. That's expected!
 ```
 
 #### (Recommended) Configure git message template
