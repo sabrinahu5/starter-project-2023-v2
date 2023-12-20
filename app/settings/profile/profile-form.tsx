@@ -9,8 +9,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
+import { createBrowserSupabaseClient } from "@/lib/client-utils";
 import { type Database } from "@/lib/schema";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useState, type BaseSyntheticEvent } from "react";
 
@@ -55,7 +55,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
   const router = useRouter();
 
   const onSubmit = async (data: ProfileFormValues) => {
-    const supabase = createClientComponentClient<Database>();
+    const supabase = createBrowserSupabaseClient();
     const { error } = await supabase
       .from("profiles")
       .update({ biography: data.bio, display_name: data.username })

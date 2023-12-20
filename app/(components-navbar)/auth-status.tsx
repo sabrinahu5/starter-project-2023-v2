@@ -11,6 +11,8 @@ export default async function AuthStatus() {
     data: { session },
   } = await supabase.auth.getSession();
 
+  console.log(session);
+
   if (!session) {
     return (
       <Button asChild>

@@ -11,8 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { createBrowserSupabaseClient } from "@/lib/client-utils";
 import { type Database } from "@/lib/schema";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -21,7 +21,7 @@ type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 export default function UserNav({ profile }: { profile: Profile }) {
   // Create Supabase client (for client components)
-  const supabaseClient = createClientComponentClient<Database>();
+  const supabaseClient = createBrowserSupabaseClient();
 
   const router = useRouter();
 

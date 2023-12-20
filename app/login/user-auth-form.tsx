@@ -5,10 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
-import { type Database } from "@/lib/schema";
+import { createBrowserSupabaseClient } from "@/lib/client-utils";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState, type BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,7 +35,7 @@ export default function UserAuthForm({ className, ...props }: React.HTMLAttribut
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Obtain supabase client from context provider
-  const supabaseClient = createClientComponentClient<Database>();
+  const supabaseClient = createBrowserSupabaseClient();
 
   const onSubmit = async (input: FormData) => {
     setIsLoading(true);
