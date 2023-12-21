@@ -7,11 +7,6 @@ import { cookies } from "next/headers";
 import { cache } from "react";
 import { type Database } from "./schema";
 
-/* Modified createServerComponentClient variant that correctly handles passing of cookies from next/headers to
-avoid a bug with Next.js static page rendering.
-Read more here: https://github.com/vercel/next.js/issues/49373
-This issue may be fixed in newer versions of Next.js and/or @supabase/auth-helpers-nextjs, so you may not need this function
-in the future and can just call createServerComponentClient like usual. */
 export const createServerSupabaseClient = cache(() => {
   const cookieStore = cookies();
   const supabase = createServerClient<Database>(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
