@@ -30,8 +30,8 @@ const profileFormSchema = z.object({
       message: "Biography cannot be longer than 160 characters.",
     })
     .nullable()
-    // Transform empty string or only whitespace input to null before form submission
-    .transform((val) => (val?.trim() === "" ? null : val?.trim())),
+    // Transform empty string or only whitespace input to null before form submission, and trim whitespace otherwise
+    .transform((val) => (!val || val.trim() === "" ? null : val.trim())),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -41,6 +41,11 @@ type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 export default function ProfileForm({ profile }: { profile: Profile }) {
   const [isEditing, setIsEditing] = useState(false);
 
+  // Default values for the form fields.
+  /* Because the react-hook-form (RHF) used here is a controlled form (not an uncontrolled form),
+  all form fields should be set to non-undefined default values since `undefined` conflicts with controlled components.
+  Read more here: https://legacy.react-hook-form.com/api/useform/
+  */
   const defaultValues = {
     username: profile.display_name,
     bio: profile.biography,
@@ -133,9 +138,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
                     {...rest}
                   />
                 </FormControl>
-                <FormDescription>
-                  You can <span>@mention</span> other users and organizations to link to them.
-                </FormDescription>
+                <FormDescription>A short description of yourself!</FormDescription>
                 <FormMessage />
               </FormItem>
             );

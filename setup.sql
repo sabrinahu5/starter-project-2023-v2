@@ -29,7 +29,7 @@ declare username text;
 begin
   select substring(new.email from '(.*)@') into username;
   insert into public.profiles (id, email, display_name, biography)
-  values (new.id, new.email, username, '');
+  values (new.id, new.email, username, null);
   return new;
 end;
 $$ language plpgsql security definer;
