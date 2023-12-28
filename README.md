@@ -419,6 +419,14 @@ Enables you to collaboratively edit and debug with others in real time. Think Go
 
 Allows us to run `eslint` after `prettier` on save, which is the fastest order.
 
+#### [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)
+
+Improves error highlighting and displays diagnostic text inline.
+
+#### [Pretty Typescript Errors](https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors)
+
+Formats Typescript errors to be more human-readable.
+
 ---
 
 ## Deployment guides
