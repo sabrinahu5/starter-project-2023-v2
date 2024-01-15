@@ -12,7 +12,7 @@ import { toast } from "@/components/ui/use-toast";
 import { createBrowserSupabaseClient } from "@/lib/client-utils";
 import { type Database } from "@/lib/schema";
 import { useRouter } from "next/navigation";
-import { useState, type BaseSyntheticEvent } from "react";
+import { useState, type BaseSyntheticEvent, type MouseEvent } from "react";
 
 const profileFormSchema = z.object({
   username: z
@@ -88,7 +88,13 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
     });
   };
 
-  const handleCancel = () => {
+  const startEditing = (e: MouseEvent) => {
+    e.preventDefault();
+    setIsEditing(true);
+  };
+
+  const handleCancel = (e: MouseEvent) => {
+    e.preventDefault();
     form.reset(defaultValues);
     setIsEditing(false);
   };
@@ -154,7 +160,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
             </Button>
           </>
         ) : (
-          <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+          <Button onClick={startEditing}>Edit Profile</Button>
         )}
       </form>
     </Form>
