@@ -3,18 +3,18 @@ import { createServerSupabaseClient } from "@/lib/server-utils";
 import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
-  // Create supabase server component client and obtain user session from stored cookie
+  // Create supabase server component client and obtain user session from Supabase Auth
   const supabase = createServerSupabaseClient();
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     // this is a protected route - only users who are signed in can view this route
     redirect("/");
   }
 
-  const userEmail = session.user.email;
+  const userEmail = user.email;
 
   return (
     <>

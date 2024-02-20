@@ -5,13 +5,13 @@ import Link from "next/link";
 import UserNav from "./user-nav";
 
 export default async function AuthStatus() {
-  // Create supabase server component client and obtain user session from stored cookie
+  // Create supabase server component client and obtain user session from Supabase Auth
   const supabase = createServerSupabaseClient();
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     return (
       <Button asChild>
         <Link href="/login">Log in</Link>
@@ -19,7 +19,7 @@ export default async function AuthStatus() {
     );
   }
 
-  const { profile, error } = await getUserProfile(supabase, session);
+  const { profile, error } = await getUserProfile(supabase, user);
 
   if (error) {
     return;

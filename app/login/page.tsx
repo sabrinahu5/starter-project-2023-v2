@@ -3,13 +3,13 @@ import { redirect } from "next/navigation";
 import UserAuthForm from "./user-auth-form";
 
 export default async function LoginPage() {
-  // Create supabase server component client and obtain user session from stored cookie
+  // Create supabase server component client and obtain user session from Supabase Auth
   const supabase = createServerSupabaseClient();
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (session) {
+  if (user) {
     // Users who are already signed in should be redirected to dashboard
     redirect("/dashboard");
   }

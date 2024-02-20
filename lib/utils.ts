@@ -1,6 +1,6 @@
 // Add util functions that can be used in both server and client components.
 // For more info on how to avoid poisoning your server/client components: https://www.youtube.com/watch?v=BZlwtR9pDp4
-import { type Session, type SupabaseClient } from "@supabase/supabase-js";
+import { type SupabaseClient, type User } from "@supabase/supabase-js";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { type Database } from "./schema";
@@ -28,9 +28,9 @@ export function delay(milliseconds: number) {
 // Also note the structure of the function typing and return, which ensures that errors from supabase MUST be handled whenever this query is used in a component.
 export async function getUserProfile(
   supabase: SupabaseClient<Database>,
-  session: Session,
+  user: User,
 ): Promise<{ profile: Profile; error: null } | { profile: null; error: Error }> {
-  const { data, error } = await supabase.from("profiles").select().eq("id", session.user.id);
+  const { data, error } = await supabase.from("profiles").select().eq("id", user.id);
 
   if (error) {
     return {
