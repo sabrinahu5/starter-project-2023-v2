@@ -98,9 +98,9 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
 2. There is a `.env.example` file in your local project directory (e.g. in VSCode). Duplicate it (into the same directory) and rename to `.env`. Inside `.env`, set the following variables according to your Supabase project settings:
 
-   - `NEXT_PUBLIC_SUPABASE_URL`: From Project Settings > API > Project URL.
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: From Project Settings > API > Project API Keys > `anon` `public`.
-   - `SECRET_SUPABASE_CONNECTION_STRING`: From Project Settings > Database > Connection String > Nodejs. Replace `[YOUR-PASSWORD]` with your database password.
+   - `NEXT_PUBLIC_SUPABASE_URL`: Paste from Project Settings > API > Project URL.
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Paste from Project Settings > API > Project API Keys > `anon` `public`.
+   - `SECRET_SUPABASE_CONNECTION_STRING`: Paste from Project Settings > Database > Connection String > Nodejs, then replace `[YOUR-PASSWORD]` with your database password.
      - If you insist on using special characters in your password you will need to replace them with the **percent-encoded** version ([see this reference](https://stackoverflow.com/a/76551917))
 
 
