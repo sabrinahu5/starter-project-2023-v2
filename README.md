@@ -37,6 +37,7 @@
       - [Pretty Typescript Errors](#pretty-typescript-errors)
   - [Deployment guides](#deployment-guides)
   - [Additional stack options (for SSWEs)](#additional-stack-options-for-sswes)
+  - [Updating this project (for DOEs + future maintainers)](#updating-this-project-for-does--future-maintainers)
 
 ---
 
@@ -475,3 +476,13 @@ Read more about it [here](https://supabase.com/docs/guides/auth#redirect-urls-an
 ## Additional stack options (for SSWEs)
 
 Check out [this article](https://t4sg.notion.site/Tech-Stack-Recommendations-279121b43d254bdc96f41fea2af17f77?pvs=4) in our Eng Wiki for additional stack recommendations!
+
+## Updating this project (for DOEs + future maintainers)
+
+Ideally this project's dependencies should be updated during summer/winter breaks to prepare for the semester.
+
+You can run `npm outdated` to see what packages are out of date in package.json. The `Wanted` column shows the package versions that are allowed by the [semantic versioning](https://docs.npmjs.com/about-semantic-versioning) in `package.json`. You can update to those versions with `npm update`, a command which respects semantic versioning. After updating dependencies, you should fully test the project from initial setup to user login.
+
+Occasionally (e.g. at least once a year, and especially after major releases of core dependencies), you should update all packages to their latest versions disregarding semantic versioning; [this guide](https://medium.com/subjective-developer/update-all-node-packages-to-latest-aa128396b92b) is helpful. Note that this can introduce bugs/breaking changes into the app, so you should test thoroughly and revisit the codebase itself.
+
+It would be cool to add a testing suite (e.g. Cypress) to handle necessary testing after updating dependencies!
