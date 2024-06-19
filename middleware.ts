@@ -1,57 +1,22 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
+import { updateSession } from "./lib/server-utils";
+
+/*
+Since Server Components can't write cookies, you need middleware to
+refresh expired Auth tokens and store them.
+
+The middleware is responsible for:
+  1. Refreshing the Auth token (by calling supabase.auth.getUser).
+  2. Passing the refreshed Auth token to Server Components, so they don't attempt to refresh the same token themselves. This is accomplished with request.cookies.set.
+  3. Passing the refreshed Auth token to the browser, so it replaces the old token. This is accomplished with response.cookies.set.
+*/
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value;
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-        },
-        remove(name: string, options: CookieOptions) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          request.cookies.set({
-            name,
-            value: "",
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-        },
-      },
-    },
-  );
-
-  await supabase.auth.getUser();
-
-  return response;
+  return await updateSession(request);
 }
 
 export const config = {
+  // Matcher so the middleware doesn't run on routes that don't access Supabase.
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
@@ -60,6 +25,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

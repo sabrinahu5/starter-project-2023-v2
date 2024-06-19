@@ -7,6 +7,8 @@
       - [Package installation](#package-installation)
       - [Supabase Connection Setup](#supabase-connection-setup)
       - [Supabase Database Setup](#supabase-database-setup)
+      - [Supabase + Google Authentication Setup](#supabase--google-authentication-setup)
+        - [User auth workflow + security explained](#user-auth-workflow--security-explained)
       - [Supabase CLI Setup](#supabase-cli-setup)
       - [Run the webapp](#run-the-webapp)
       - [(Recommended) Configure git message template](#recommended-configure-git-message-template)
@@ -31,6 +33,8 @@
       - [BetterComments](#bettercomments)
       - [Live Share](#live-share)
       - [Format Code Action](#format-code-action)
+      - [Error Lens](#error-lens)
+      - [Pretty Typescript Errors](#pretty-typescript-errors)
   - [Deployment guides](#deployment-guides)
   - [Additional stack options (for SSWEs)](#additional-stack-options-for-sswes)
 
@@ -41,6 +45,8 @@
 This project is a versatile starter project for T4SG web development projects. The stack and development tools have been chosen carefully to enable teams to develop rapidly on a variety of projects and build apps that are more easily maintainable by clients post-handoff.
 
 The project uses Next.js, a React-based framework with significant optimizations. The frontend uses `shadcn/ui`, an open-source library of UI components that are built with Radix primitives and styled with Tailwind CSS. The backend uses Supabase, an open-source Firebase alternative. The entire stack is written in Typescript to provide comprehensive typesafety across both frontend and backend.
+
+Along with this README, the codebase has several comments that should be helpful for understanding the code!
 
 ---
 
@@ -79,10 +85,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   ```bash
   added 414 packages, and audited 415 packages in 13s
-  
+
   149 packages are looking for funding
   run `npm fund` for details
-  
+
   found 0 vulnerabilities
   ```
 
@@ -94,7 +100,7 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
 1. Visit the Supabase website, create an account (or login if you already have one), and create a new project. You will be prompted to set a **Database Password; remember it**. Wait for your database provisioning and setup to finish.
 
-   * Try to avoid using special characters like `?`, `$`, etc. in your password.
+   - Try to avoid using special characters like `?`, `$`, etc. in your password.
 
 2. There is a `.env.example` file in your local project directory (e.g. in VSCode). Duplicate it (into the same directory) and rename to `.env`. Inside `.env`, set the following variables according to your Supabase project settings:
 
@@ -102,7 +108,6 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Paste from Project Settings > API > Project API Keys > `anon` `public`.
    - `SECRET_SUPABASE_CONNECTION_STRING`: Paste from Project Settings > Database > Connection String > Nodejs, then replace `[YOUR-PASSWORD]` with your database password.
      - If you insist on using special characters in your password you will need to replace them with the **percent-encoded** version ([see this reference](https://stackoverflow.com/a/76551917))
-
 
    The final result should look something like this:
 
@@ -113,13 +118,37 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
    SECRET_SUPABASE_CONNECTION_STRING="postgresql://postgres:YourDatabasePasswordHere@db.abcdefghijklmnopqrst.supabase.co:5432/postgres"
    ```
 
-   You should not share these keys publically, especially the `SECRET_SUPABASE_CONNECTION_STRING`. Note that this project uses a package from the popular [T3 stack](https://create.t3.gg/) to validate and provide typesafety to environment variables in `env.mjs` (more on this below). When using these environment variables in your code, you can import them from `env.mjs`. `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are used in the codebase itself and are thus included in this file. `SECRET_SUPABASE_CONNECTION_STRING` is used only in a helper script in `package.json` and not in the app itself, so it doesn't need to be validated.
+You should not share these keys publicly, especially the `SECRET_SUPABASE_CONNECTION_STRING`. Note that this project uses a package from the popular [T3 stack](https://create.t3.gg/) to validate and provide typesafety to environment variables in `env.mjs` (more on this below). When using these environment variables in your code, you can import them from `env.mjs`. `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are used in the codebase itself and are thus included in this file. `SECRET_SUPABASE_CONNECTION_STRING` is used only in a helper script in `package.json` and not in the app itself, so it doesn't need to be validated.
 
 #### Supabase Database Setup
 
 1. In your Supabase project dashboard, navigate to `SQL Editor` in the left sidebar, then click `(+) New Query` > `New blank query`. If you wish, you can rename the query from "Untitled Query" to something else by clicking the dropdown in the left sidebar.
 2. In your starter code, there is a `setup.sql` file containing a SQL script that will set up the database for you. Copy the entire contents of the file and paste it into your new query.
+   - You should also read through the script to see what it does. The most important part is the trigger that updates the `profiles` table when a new user signs in through Supabase Auth.
 3. Run the query with the button in the bottom right or by pressing `cmd` + `return`. In the results panel, you should see the message `Success. No rows returned`.
+
+#### Supabase + Google Authentication Setup
+
+Supabase offers user authentication through a wide range of providers (email + password, email magic link, OAuth, etc.). This starter project uses Google OAuth for user authentication, as it is among the most secure methods and should be widely applicable for many clients.
+
+To set up user authentication:
+
+1. Follow the instructions in the **Prerequisites** and **Application code configuration** sections in Supabase's Google OAuth documentation [here](https://supabase.com/docs/guides/auth/social-login/auth-google).
+   - When creating your Google Cloud project, use your Harvard Google account, use the `college.harvard.edu` organization, and select "Internal" user type. This is the quickest setup for development, but it limits your app to Harvard users. Make sure to change to "External" user type for handoff/deployment to your client; this will take time to verify your app!
+   - We're not using Google's pre-built configuration. The "Signing users in" section has already been completed, but you can read through it for more info. It's particularly helpful if you plan to connect your to additional Google services or APIs.
+2. Login to your Supabase dashboard and navigate to Authentication (left sidebar) > URL Configuration > Redirect URLs > Add URL, and add the following URL: `http://localhost:3000/auth/callback`.
+   - Supabase's auth workflow needs to redirect to the `/auth/callback` route after login in order to properly store the user session in cookies. Thus, we need to add this route to our list of allowed redirects in our Supabase project!
+   - This config works fine for development. When deploying a production build, make sure to navigate to the same location in your Supabase dashboard and update both the **Site URL** and **Redirect URLs** to match your website/deployment! (i.e. Site URL should be `http://mywebsite.com` and Redirect URL should be `http://mywebsite.com/auth/callback`.)
+
+Check out the [Supabase Auth documentation](https://supabase.com/docs/guides/auth/server-side/nextjs?queryGroups=router&router=app) for more explanation on how Supabase Auth works with Next.js, as well as helpful guides for switching authentication providers if you need!
+
+##### User auth workflow + security explained
+
+When a user logs in, Supabase stores info about the user in the `users` table in the `auth` schema. This table is internal to Supabase and cannot be edited to store additional user info. Thus, in the `setup.sql` script we ran earlier, we created a `profiles` table in the `public` schema, which is the part of the database that is accessible and configurable. We also added a database trigger that creates a new row in the `profiles` table whenever a new user signs in. The `id` of the new row in `public.profiles` matches the `id` of the new user in `auth.users`. Thus, you can manage the columns in the `profiles` table to structure the user-associated data your app needs (e.g. email, display name, biography, etc).
+
+If you need to remove a user from your Supabase project (e.g. so that they can sign in "for the first time" again), you should remove their corresponding row from `public.profiles`. You can then navigate to Authentication > Users and delete their corresponding user.
+
+Finally, note that the `setup.sql` script enables row-level security (RLS) for the `profiles` table it created. Whenever you modify your database schema (e.g. adding/editing tables), make sure to **enable and properly configure the RLS policies for your tables**. This is very important for creating a **secure app** for your client! BaaS platforms such as Supabase allow us to skip the trouble of setting up a backend, but that also means that you have to be extra careful to set up correct security policies in your platform’s settings, because you’re not implementing them in your code.
 
 #### Supabase CLI Setup
 
@@ -200,9 +229,9 @@ A quick tip on coding with Typescript: When fixing type errors, you should avoid
 
 Also, note that this project implements a few additions to make Typescript's type-checking more strict (and thus encourage better code). Because of this, you may get typing/warning errors when using code repurposed from projects with less strict type-checking. If these become overly burdensome for you/your team, feel free to remove/disable them!
 
-* The package `ts-reset` is installed, implementing additional rules surrounding JSON and array operations ([read more here](https://github.com/total-typescript/ts-reset?tab=readme-ov-file))
-* The rule `noUncheckedIndexedAccess` is set to `true` in `tsconfig.json` to improve typesafety of accessing objects ([read more here](https://www.totaltypescript.com/tips/make-accessing-objects-safer-by-enabling-nouncheckedindexedaccess-in-tsconfig))
-* The `eslint` config in `eslintrc.cjs` extends the rule configurations `plugin:@typescript-eslint/recommended-type-checked` and `plugin:@typescript-eslint/stylistic-type-checked`, whereas other projects may extend the less-strict configurations `plugin:@typescript-eslint/recommended` and `plugin:@typescript-eslint/stylistic` ([read more here](https://typescript-eslint.io/linting/typed-linting/)).
+- The package `ts-reset` is installed, implementing additional rules surrounding JSON and array operations ([read more here](https://github.com/total-typescript/ts-reset?tab=readme-ov-file))
+- The rule `noUncheckedIndexedAccess` is set to `true` in `tsconfig.json` to improve typesafety of accessing objects ([read more here](https://www.totaltypescript.com/tips/make-accessing-objects-safer-by-enabling-nouncheckedindexedaccess-in-tsconfig))
+- The `eslint` config in `eslintrc.cjs` extends the rule configurations `plugin:@typescript-eslint/recommended-type-checked` and `plugin:@typescript-eslint/stylistic-type-checked`, whereas other projects may extend the less-strict configurations `plugin:@typescript-eslint/recommended` and `plugin:@typescript-eslint/stylistic` ([read more here](https://typescript-eslint.io/linting/typed-linting/)).
 
 Finally, note that type definitions for many `npm` packages are [maintained by the Typescript community](https://github.com/DefinitelyTyped/DefinitelyTyped) and may be found with the `@types/` prefix on [`npm`](https://www.npmjs.com), if they're not already included in the package itself (generally they are). Several of the config files in the project (ex: `.prettierrc.cjs`) manually import type definitions, but you generally will not need to worry about such syntax in your actual source code.
 
@@ -435,9 +464,9 @@ Deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netl
 
 When deploying, make sure you set the appropriate environment variables for your deployment corresponding to those found in `.env`. That is, if you're using a separate Supabase project for production, use the environment variables for that project, but if you're just using your development database, you can paste in the contents of your local `.env` file.
 
-Additionally, you need to make sure you configure Supabase's redirect URLs to accept login requests from your deployed site. Specifically, it needs to accept `https://my-domain-name.com/auth/callback`, since Supabase redirects to the `/auth/callback` route after login. 
+Additionally, you need to make sure you configure Supabase's redirect URLs to accept login requests from your deployed site. Specifically, it needs to accept `https://my-domain-name.com/auth/callback`, since Supabase redirects to the `/auth/callback` route after login.
 
-The easiest way to do this is to login to your Supabase dashboard and navigate to Authentication (left sidebar) > URL Configuration > Redirect URLs > Add URL, and add the following URL: `https://my-domain-name.com/**`.
+The easiest way to do this is to login to your Supabase dashboard and navigate to Authentication (left sidebar) > URL Configuration > Redirect URLs > Add URL, and add the following URL: `https://my-domain-name.com/auth/callback`.
 
 Read more about it [here](https://supabase.com/docs/guides/auth#redirect-urls-and-wildcards).
 
@@ -446,4 +475,3 @@ Read more about it [here](https://supabase.com/docs/guides/auth#redirect-urls-an
 ## Additional stack options (for SSWEs)
 
 Check out [this article](https://t4sg.notion.site/Tech-Stack-Recommendations-279121b43d254bdc96f41fea2af17f77?pvs=4) in our Eng Wiki for additional stack recommendations!
-
