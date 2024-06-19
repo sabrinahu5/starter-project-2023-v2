@@ -3,16 +3,16 @@
 - [T4SG Starter Project](#t4sg-starter-project)
   - [Introduction](#introduction)
   - [Setup](#setup)
-      - [Clone repository](#clone-repository)
-      - [Package installation](#package-installation)
-      - [Supabase Connection Setup](#supabase-connection-setup)
-      - [Supabase Database Setup](#supabase-database-setup)
-      - [Supabase + Google Authentication Setup](#supabase--google-authentication-setup)
+      - [(1) Clone repository](#1-clone-repository)
+      - [(2) Package installation](#2-package-installation)
+      - [(3) Supabase Connection Setup](#3-supabase-connection-setup)
+      - [(4) Supabase Database Setup](#4-supabase-database-setup)
+      - [(5) Supabase + Google Authentication Setup](#5-supabase--google-authentication-setup)
         - [User auth workflow + security explained](#user-auth-workflow--security-explained)
-      - [Supabase CLI Setup](#supabase-cli-setup)
-      - [Run the webapp](#run-the-webapp)
-      - [(Recommended) Configure git message template](#recommended-configure-git-message-template)
-      - [Github CI workflow (for SSWEs, do during project setup)](#github-ci-workflow-for-sswes-do-during-project-setup)
+      - [(6) Supabase CLI Setup](#6-supabase-cli-setup)
+      - [(7) Run the webapp](#7-run-the-webapp)
+      - [(8) (Recommended) Configure git message template](#8-recommended-configure-git-message-template)
+      - [(9) Github CI workflow (for SSWEs, do during project setup)](#9-github-ci-workflow-for-sswes-do-during-project-setup)
   - [Stack references](#stack-references)
     - [Typescript](#typescript)
     - [Components and Styling: `shadcn/ui`, Radix, and Tailwind CSS](#components-and-styling-shadcnui-radix-and-tailwind-css)
@@ -52,7 +52,7 @@ Along with this README, the codebase has several comments that should be helpful
 
 ## Setup
 
-#### Clone repository
+#### (1) Clone repository
 
 `cd` into a desired destination folder, then clone the repo (preferably using SSH):
 
@@ -60,7 +60,7 @@ Along with this README, the codebase has several comments that should be helpful
 git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 ```
 
-#### Package installation
+#### (2) Package installation
 
 1. Open the project folder in VSCode. You can do so with the following terminal shortcut:
 
@@ -96,7 +96,7 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
 5. You will also get a prompt to use the workspace's Typescript version; accept it. You may have to navigate to any `.ts` or `.tsx` file in the project and open it to receive the prompt. If you don't get one, or if you get an error that the path "does not point to a valid tsserver install", make sure you're using the workspace's Typescript version by pressing `cmd` + `shift` + `P` and typing "typescript", selecting `Typescript: Select Typescript Version`, and selecting `Use Workspace Version`. Again, you'll need to be viewing a `.tsx` or `.ts` file to do this.
 
-#### Supabase Connection Setup
+#### (3) Supabase Connection Setup
 
 1. Visit the Supabase website, create an account (or login if you already have one), and create a new project. You will be prompted to set a **Database Password; remember it**. Wait for your database provisioning and setup to finish.
 
@@ -120,14 +120,14 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
 You should not share these keys publicly, especially the `SECRET_SUPABASE_CONNECTION_STRING`. Note that this project uses a package from the popular [T3 stack](https://create.t3.gg/) to validate and provide typesafety to environment variables in `env.mjs` (more on this below). When using these environment variables in your code, you can import them from `env.mjs`. `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are used in the codebase itself and are thus included in this file. `SECRET_SUPABASE_CONNECTION_STRING` is used only in a helper script in `package.json` and not in the app itself, so it doesn't need to be validated.
 
-#### Supabase Database Setup
+#### (4) Supabase Database Setup
 
 1. In your Supabase project dashboard, navigate to `SQL Editor` in the left sidebar, then click `(+) New Query` > `New blank query`. If you wish, you can rename the query from "Untitled Query" to something else by clicking the dropdown in the left sidebar.
 2. In your starter code, there is a `setup.sql` file containing a SQL script that will set up the database for you. Copy the entire contents of the file and paste it into your new query.
    - You should also read through the script to see what it does. The most important part is the trigger that updates the `profiles` table when a new user signs in through Supabase Auth.
 3. Run the query with the button in the bottom right or by pressing `cmd` + `return`. In the results panel, you should see the message `Success. No rows returned`.
 
-#### Supabase + Google Authentication Setup
+#### (5) Supabase + Google Authentication Setup
 
 Supabase offers user authentication through a wide range of providers (email + password, email magic link, OAuth, etc.). This starter project uses Google OAuth for user authentication, as it is among the most secure methods and should be widely applicable for many clients.
 
@@ -150,7 +150,7 @@ If you need to remove a user from your Supabase project (e.g. so that they can s
 
 Finally, note that the `setup.sql` script enables row-level security (RLS) for the `profiles` table it created. Whenever you modify your database schema (e.g. adding/editing tables), make sure to **enable and properly configure the RLS policies for your tables**. This is very important for creating a **secure app** for your client! BaaS platforms such as Supabase allow us to skip the trouble of setting up a backend, but that also means that you have to be extra careful to set up correct security policies in your platform’s settings, because you’re not implementing them in your code.
 
-#### Supabase CLI Setup
+#### (6) Supabase CLI Setup
 
 1. The Supabase CLI will be helpful for a number of functions, such as running Supabase locally and generating Typescript types from our database schema. For the CLI to work, you will have to install [Docker](https://www.docker.com). During the installation process, if Docker prompts you to run an `osascript`, make sure to run it.
 
@@ -170,7 +170,7 @@ Finally, note that the `setup.sql` script enables row-level security (RLS) for t
 
 More instructions on troubleshooting potential errors are below.
 
-#### Run the webapp
+#### (7) Run the webapp
 
 You can run the webapp with the following terminal command. By default, the webapp should be accessible at `http://localhost:3000/`.
 
@@ -181,7 +181,7 @@ npm run dev
 # You'll get several "compiling" messages after running this command. That's expected!
 ```
 
-#### (Recommended) Configure git message template
+#### (8) (Recommended) Configure git message template
 
 This project also includes a template for writing good git commit messages. You can configure this template (affects only the project repo) using the following terminal command:
 
@@ -192,7 +192,7 @@ git config commit.template .gitmessage
 
 In future commits, you can run `git commit` (with no attached message or `-m` tag) to open the commit message template in VSCode. Fill in the blanks, save the file (`cmd + S`), and close the file (`cmd + W`) to finish the commit.
 
-#### Github CI workflow (for SSWEs, do during project setup)
+#### (9) Github CI workflow (for SSWEs, do during project setup)
 
 We implemented a [Github Actions](https://docs.github.com/en/actions) workflow for CI ([continuous integration](<https://www.atlassian.com/continuous-delivery/continuous-integration#:~:text=Continuous%20integration%20(CI)%20is%20the,builds%20and%20tests%20then%20run.>)) that will process any pull requests made to `main`. The workflow auto-formats the code in the pull request with `prettier` and checks for any `eslint` errors. This allows SWEs to freely make commits on side branches (without enforced formatting or linting) but still prevents code with poor quality or formatting from being pushed to `main`. To set this up, do the following steps:
 
