@@ -86,10 +86,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   ```bash
   added 414 packages, and audited 415 packages in 13s
-
+  
   149 packages are looking for funding
   run `npm fund` for details
-
+  
   found 0 vulnerabilities
   ```
 
@@ -136,6 +136,7 @@ To set up user authentication:
 
 1. Follow the instructions in the **Prerequisites** and **Application code configuration** sections in Supabase's Google OAuth documentation [here](https://supabase.com/docs/guides/auth/social-login/auth-google).
    - When creating your Google Cloud project, use your Harvard Google account, use the `college.harvard.edu` organization, and select "Internal" user type. This is the quickest setup for development, but it limits your app to Harvard users. Make sure to change to "External" user type for handoff/deployment to your client; this will take time to verify your app!
+   - When adding your site URL to the **Authorized Javascript Origins** (step 7 of Application code configuration), use `http://localhost:3000`. This is fine for development, but you will need to change this when deploying!
    - We're not using Google's pre-built configuration. The "Signing users in" section has already been completed, but you can read through it for more info. It's particularly helpful if you plan to connect your to additional Google services or APIs.
 2. Login to your Supabase dashboard and navigate to Authentication (left sidebar) > URL Configuration > Redirect URLs > Add URL, and add the following URL: `http://localhost:3000/auth/callback`.
    - Supabase's auth workflow needs to redirect to the `/auth/callback` route after login in order to properly store the user session in cookies. Thus, we need to add this route to our list of allowed redirects in our Supabase project!
@@ -470,6 +471,8 @@ Additionally, you need to make sure you configure Supabase's redirect URLs to ac
 The easiest way to do this is to login to your Supabase dashboard and navigate to Authentication (left sidebar) > URL Configuration > Redirect URLs > Add URL, and add the following URL: `https://my-domain-name.com/auth/callback`.
 
 Read more about it [here](https://supabase.com/docs/guides/auth#redirect-urls-and-wildcards).
+
+Finally, make sure that you've reconfigured your Google Cloud Project to accept authentication for your deployed website! Specifically, you need to add your site URL to the **Authorized Javascript Origins**.
 
 ---
 
