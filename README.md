@@ -215,17 +215,17 @@ We implemented a [Github Actions](https://docs.github.com/en/actions) workflow f
 
 ## File walkthrough
 
-### `app/`
+#### `app/`
 
-### `components/`
+#### `components/`
 
-### `lib/`
+#### `lib/`
 
-### Configuration Files
+#### Configuration Files
 
-### Other Files
+#### Other Files
 
-### Files to Alter for Specific Purposes
+#### Files to Alter for Specific Purposes
 
 - **Adding new pages or routes**: Create new files in the `app/` directory. To create a new route, create a new folder in the `app/` directory and add a `page.tsx` file. The route of the new page is the name of the folder. For example, if you create a `my-page` folder, the route of the page is `/my-page`.
 
