@@ -3,23 +3,24 @@
 - [T4SG Starter Project](#t4sg-starter-project)
   - [Introduction](#introduction)
   - [Setup](#setup)
-      - [(1) Clone repository](#1-clone-repository)
-      - [(2) Package installation](#2-package-installation)
-      - [(3) Supabase Connection Setup](#3-supabase-connection-setup)
-      - [(4) Supabase Database Setup](#4-supabase-database-setup)
-      - [(5) Supabase + Google Authentication Setup](#5-supabase--google-authentication-setup)
-        - [User auth workflow + security explained](#user-auth-workflow--security-explained)
-      - [(6) Supabase CLI Setup](#6-supabase-cli-setup)
-      - [(7) Run the webapp](#7-run-the-webapp)
-      - [(8) (Recommended) Configure git message template](#8-recommended-configure-git-message-template)
-      - [(9) Github CI workflow (for SSWEs, do during project setup)](#9-github-ci-workflow-for-sswes-do-during-project-setup)
+    - [(1) Clone repository](#1-clone-repository)
+    - [(2) Package installation](#2-package-installation)
+    - [(3) Supabase Connection Setup](#3-supabase-connection-setup)
+    - [(4) Supabase Database Setup](#4-supabase-database-setup)
+    - [(5) Supabase + Google Authentication Setup](#5-supabase--google-authentication-setup)
+      - [User auth workflow + security explained](#user-auth-workflow--security-explained)
+    - [(6) Supabase CLI Setup](#6-supabase-cli-setup)
+    - [(7) Run the webapp](#7-run-the-webapp)
+    - [(8) (Recommended) Configure git message template](#8-recommended-configure-git-message-template)
+    - [(9) Github CI workflow (for SSWEs, do during project setup)](#9-github-ci-workflow-for-sswes-do-during-project-setup)
+  - [File walkthrough](#file-walkthrough)
   - [Stack references](#stack-references)
     - [Typescript](#typescript)
     - [Components and Styling: `shadcn/ui`, Radix, and Tailwind CSS](#components-and-styling-shadcnui-radix-and-tailwind-css)
     - [Next.js](#nextjs)
       - [Tips for learning:](#tips-for-learning)
     - [Supabase](#supabase)
-        - [Troubleshooting the Supabase CLI](#troubleshooting-the-supabase-cli)
+      - [Troubleshooting the Supabase CLI](#troubleshooting-the-supabase-cli)
     - [Environment variables](#environment-variables)
   - [Development tools](#development-tools)
     - [Code formatting and linting tools](#code-formatting-and-linting-tools)
@@ -86,10 +87,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   ```bash
   added 414 packages, and audited 415 packages in 13s
-  
+
   149 packages are looking for funding
   run `npm fund` for details
-  
+
   found 0 vulnerabilities
   ```
 
