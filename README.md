@@ -215,6 +215,28 @@ We implemented a [Github Actions](https://docs.github.com/en/actions) workflow f
 
 ## File walkthrough
 
+### `app/`
+
+### `components/`
+
+### `lib/`
+
+### Configuration Files
+
+### Other Files
+
+### Files to Alter for Specific Purposes
+
+- **Adding new pages or routes**: Create new files in the `app/` directory. To create a new route, create a new folder in the `app/` directory and add a `page.tsx` file. The route of the new page is the name of the folder. For example, if you create a `my-page` folder, the route of the page is `/my-page`.
+
+- **Adding new components**: Create new files in the `components/` directory. For UI-specific components, create a new file in the `components/ui` directory.
+
+- **Updating environment variables**: Modify the `.env` file and update `env.mjs` to reflect the new environment variables.
+
+- **Updating styles**: Modify `tailwind.config.ts` and `app/globals.css` to update the styles of the webapp.
+
+- **Updating utility functions**: Modify or add new functions in `lib` to update the utility functions.
+
 ---
 
 ## Stack references
