@@ -269,9 +269,19 @@ This folder contains utility functions and type definitions that facilitate both
 - `server-utils.ts`: Contains utility functions that are intended to be used exclusively in server-side components. The primary functions provided in this file include creating a Supabase client configured for server-side operations and managing cookies for authentication.
 - `utils.ts`: Contains general utility functions that can be used in both server and client components. The functions provided include one for conditionally merging Tailwind CSS classes, one for pausing execution for debugging purposes, and one for retrieving user profiles from Supabase.
 
-#### Configuration Files
+#### Configuration Files & More
 
-#### Other Files
+The rest of the repository includes configuration and other files that collectively ensure that the project maintains high code quality, consistent styling, and secure environment variable management, while also providing necessary configurations for development and production environments.
+
+- `.env`: Stores environment variables that configure various aspects of the application, such as Supabase connection.
+- `env.mjs`: Validates and provides type safety for environment variables.
+- `.gitignore`: Specifies which files and directories should be ignored by Git.
+- `package.json`, `package-lock.json`: Defines the project's metadata, dependencies, scripts, and other configurations.
+- `next.config.js`: Configures various settings for the Next.js application.
+- `setup.sql`: Contains SQL code to set up the database schema and initial data.
+- `middleware.ts`: Defines middleware functions that run before requests are completed.
+- `components.json`: Configures the `shadcn/ui` library.
+- `eslintrc.cjs`, `prettierrc.cjs`, `postcss.config.cjs`, `tailwind.config.ts`, `tsconfig.json`: Configures ESLint, Prettier, PostCSS, Tailwind CSS, and TypeScript, respectively, to enforce code quality, formatting, and type safety.
 
 #### Files to Alter for Specific Purposes
 
