@@ -217,6 +217,26 @@ We implemented a [Github Actions](https://docs.github.com/en/actions) workflow f
 
 #### `app/`
 
+This folder contains main application code, including pages, some components, and route handlers.
+
+- `(components-navbar)`
+
+The `(components-navbar)` folder contains components related to the navigation bar, including user authentication status, login functionality, and theme toggling.
+
+- `auth-status.tsx`: Checks the user's authentication status using Supabase. If the user is authenticated, it displays the `UserNav` component; otherwise, it shows the `LoginButton` component.
+- `login-button.tsx`: Provides a button for users to login using Google OAuth. It handles the sign-in process and displays a toast notification if an error occurs.
+- `mode-toggle.tsx`: Provides a dropdown menu component that allows users to toggle between light, dark, and system themes using the `next-themes` library.
+- `navbar.tsx`: Renders the main navigation bar of the application. It includes links to the various pages of the application. To add a new 'tab' to the navbar, you must edit this file.
+- `user-nav.tsx`: Displays a dropdown menu with user-specific options such as viewing the profile, accessing settings, and logging out.
+
+- `(auth)`
+
+- `dashboard`
+
+- `settings`
+
+- Other files
+
 #### `components/`
 
 #### `lib/`
