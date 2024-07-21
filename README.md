@@ -14,6 +14,11 @@
     - [(8) (Recommended) Configure git message template](#8-recommended-configure-git-message-template)
     - [(9) Github CI workflow (for SSWEs, do during project setup)](#9-github-ci-workflow-for-sswes-do-during-project-setup)
   - [File walkthrough](#file-walkthrough)
+    - [`app/`](#app)
+    - [`components/`](#components)
+    - [`lib/`](#lib)
+    - [Configuration Files & More](#configuration-files-&-more)
+    - [Files to Alter for Specific Purposes](#files-to-alter-for-specific-purposes)
   - [Stack references](#stack-references)
     - [Typescript](#typescript)
     - [Components and Styling: `shadcn/ui`, Radix, and Tailwind CSS](#components-and-styling-shadcnui-radix-and-tailwind-css)
@@ -230,12 +235,15 @@ This folder contains main application code, including pages, some components, an
   - `user-nav.tsx`: Displays a dropdown menu with user-specific options such as viewing the profile, accessing settings, and logging out.
 
 - `auth/callback`
+
   The `auth/callback` folder contains the `route.ts` file, which handles the callback from Supabase authentication. Its primary function is to process the authentication code received from Supabase, exchange it for a session, and set the session cookies. If the authentication is successful, it redirects the user to the specified next URL; otherwise, it redirects to an error page.
 
 - `dashboard`
+
   The `dashboard` folder contains the `page.tsx` file, which renders the dashboard page. This page is a protected route, so it is only accessible to authenticated users. This folder provides a template for how to create new authenticated pages for the developer's project.
 
 - `settings`
+
   The `settings` folder contains components and pages related to user settings and profile management. It provides a basic template for the developer to allow users to edit both general and profile settings.
 
   - `general/page.tsx`: Renders the general settings page. Edit this file to allow users to edit general settings.
