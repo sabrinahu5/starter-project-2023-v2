@@ -223,9 +223,9 @@ This folder contains main application code, including pages, some components, an
 
   The `(components-navbar)` folder contains components related to the navigation bar, including user authentication status, login functionality, and theme toggling.
 
-  - `auth-status.tsx`: Checks the user's authentication status using Supabase. If the user is authenticated, it displays the `UserNav` component; otherwise, it shows the `LoginButton` component.
-  - `login-button.tsx`: Provides a button for users to login using Google OAuth. It handles the sign-in process and displays a toast notification if an error occurs.
-  - `mode-toggle.tsx`: Provides a dropdown menu component that allows users to toggle between light, dark, and system themes using the `next-themes` library.
+  - `auth-status.tsx`: Checks the user's authentication status using Supabase, and either displays the `UserNav` component or the `LoginButton` component.
+  - `login-button.tsx`: Provides a button for users to login using Google OAuth and handles the sign-in process.
+  - `mode-toggle.tsx`: Provides a dropdown menu component that allows users to toggle between light, dark, and system themes.
   - `navbar.tsx`: Renders the main navigation bar of the application. It includes links to the various pages of the application. To add a new 'tab' to the navbar, you must edit this file.
   - `user-nav.tsx`: Displays a dropdown menu with user-specific options such as viewing the profile, accessing settings, and logging out.
 
@@ -243,9 +243,14 @@ This folder contains main application code, including pages, some components, an
     - `page.tsx`: Renders the profile settings page for authenticated users, using the `ProfileForm` component.
     - `profile-form.tsx`: A client component that provides a form for users to update their profile information.
   - `layout.tsx`: Defines the layout for the settings pages. It ensures that only authenticated users can access the settings and provides a consistent structure for the settings pages, including a sidebar navigation.
-  - `page.tsx`: Redirects users to the general settings page when they navigate to the `/settings` route. This could be changed depending on how the developer wants to structure their settings pages.
+  - `page.tsx`: Redirects users to the general settings page when they navigate to the `/settings` route.
 
 - Other files
+  - `layout.tsx`: Defines the root layout for the entire application, including a navigation bar and main content area.
+  - `page.tsx`: Serves as the home page of the application, and is rendered when the user navigates to the root URL (`/`).
+  - `not-found.tsx` and `loading.tsx`: These are the fallback pages for the application, and are rendered when the user navigates to a page that does not exist or when the page is loading.
+  - `providers.tsx`: Sets up the context providers for the application.
+  - `globals.css`: Defines the global styles for the application.
 
 #### `components/`
 
