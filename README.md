@@ -229,11 +229,21 @@ This folder contains main application code, including pages, some components, an
   - `navbar.tsx`: Renders the main navigation bar of the application. It includes links to the various pages of the application. To add a new 'tab' to the navbar, you must edit this file.
   - `user-nav.tsx`: Displays a dropdown menu with user-specific options such as viewing the profile, accessing settings, and logging out.
 
-- `(auth)`
+- `auth/callback`
+  The `auth/callback` folder contains the `route.ts` file, which handles the callback from Supabase authentication. Its primary function is to process the authentication code received from Supabase, exchange it for a session, and set the session cookies. If the authentication is successful, it redirects the user to the specified next URL; otherwise, it redirects to an error page.
 
 - `dashboard`
+  The `dashboard` folder contains the `page.tsx` file, which renders the dashboard page. This page is a protected route, so it is only accessible to authenticated users. This folder provides a template for how to create new authenticated pages for the developer's project.
 
 - `settings`
+  The `settings` folder contains components and pages related to user settings and profile management. It provides a basic template for the developer to allow users to edit both general and profile settings.
+
+  - `general/page.tsx`: Renders the general settings page. Edit this file to allow users to edit general settings.
+  - `profile`:
+    - `page.tsx`: Renders the profile settings page for authenticated users, using the `ProfileForm` component.
+    - `profile-form.tsx`: A client component that provides a form for users to update their profile information.
+  - `layout.tsx`: Defines the layout for the settings pages. It ensures that only authenticated users can access the settings and provides a consistent structure for the settings pages, including a sidebar navigation.
+  - `page.tsx`: Redirects users to the general settings page when they navigate to the `/settings` route. This could be changed depending on how the developer wants to structure their settings pages.
 
 - Other files
 
