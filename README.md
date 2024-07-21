@@ -226,7 +226,7 @@ This folder contains main application code, including pages, some components, an
   - `auth-status.tsx`: Checks the user's authentication status using Supabase, and either displays the `UserNav` component or the `LoginButton` component.
   - `login-button.tsx`: Provides a button for users to login using Google OAuth and handles the sign-in process.
   - `mode-toggle.tsx`: Provides a dropdown menu component that allows users to toggle between light, dark, and system themes.
-  - `navbar.tsx`: Renders the main navigation bar of the application. It includes links to the various pages of the application. To add a new 'tab' to the navbar, you must edit this file.
+  - `navbar.tsx`: Renders the main navigation bar of the application. It includes links to the various pages of the application. To add a new 'tab' to the navbar, the developer must edit this file.
   - `user-nav.tsx`: Displays a dropdown menu with user-specific options such as viewing the profile, accessing settings, and logging out.
 
 - `auth/callback`
@@ -254,7 +254,20 @@ This folder contains main application code, including pages, some components, an
 
 #### `components/`
 
+This folder contains components that are used across multiple pages of the application. The developer may add components to this folder as needed throughout a project, or use the existing built-in components.
+
+- `global/`: Houses reusable, typically more general-purpose components that are used across multiple pages or sections of the application.
+- `ui/`: Houses reusable UI components that are specific to the user interface and styling of the application. Some of the built-in components include a button, typography, and form elements.
+
 #### `lib/`
+
+This folder contains utility functions and type definitions that facilitate both client-side and server-side operations within the application. The developer may need to edit or use this folder when interacting with Supabase, managing environment variables, updating type definitions, or utilizing general utility functions for both client-side and server-side operations.
+
+- `client-utils.ts`: Contains utility functions that are intended to be used exclusively in client-side components. The primary function provided in this file creates a Supabase client configured for use in the browser.
+- `reset.d.ts`: Enables the `ts-reset` package, which enhances TypeScript's type-checking capabilities.
+- `schema.ts`: Contains TypeScript type definitions that correspond to the database schema. The developer should update this file as the database schema changes, to ensure that database operations are type-checked.
+- `server-utils.ts`: Contains utility functions that are intended to be used exclusively in server-side components. The primary functions provided in this file include creating a Supabase client configured for server-side operations and managing cookies for authentication.
+- `utils.ts`: Contains general utility functions that can be used in both server and client components. The functions provided include one for conditionally merging Tailwind CSS classes, one for pausing execution for debugging purposes, and one for retrieving user profiles from Supabase.
 
 #### Configuration Files
 
