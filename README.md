@@ -17,7 +17,7 @@
     - [`app/`](#app)
     - [`components/`](#components)
     - [`lib/`](#lib)
-    - [Configuration Files & More](#configuration-files-&-more)
+    - [Configuration Files & More](#configuration-files--more)
     - [Files to Alter for Specific Purposes](#files-to-alter-for-specific-purposes)
   - [Stack references](#stack-references)
     - [Typescript](#typescript)
