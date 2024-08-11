@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <div className="flex-col md:flex">
-            <div className="ml-auto flex items-center space-x-4 p-4">
+            <div className="ml-auto flex items-center space-x-4 p-2">
               <ModeToggle />
             </div>
             {/* Conditionally display website if logged in, else display login page */}
