@@ -3,23 +3,29 @@
 - [T4SG Starter Project](#t4sg-starter-project)
   - [Introduction](#introduction)
   - [Setup](#setup)
-      - [(1) Clone repository](#1-clone-repository)
-      - [(2) Package installation](#2-package-installation)
-      - [(3) Supabase Connection Setup](#3-supabase-connection-setup)
-      - [(4) Supabase Database Setup](#4-supabase-database-setup)
-      - [(5) Supabase + Google Authentication Setup](#5-supabase--google-authentication-setup)
-        - [User auth workflow + security explained](#user-auth-workflow--security-explained)
-      - [(6) Supabase CLI Setup](#6-supabase-cli-setup)
-      - [(7) Run the webapp](#7-run-the-webapp)
-      - [(8) (Recommended) Configure git message template](#8-recommended-configure-git-message-template)
-      - [(9) Github CI workflow (for SSWEs, do during project setup)](#9-github-ci-workflow-for-sswes-do-during-project-setup)
+    - [(1) Clone repository](#1-clone-repository)
+    - [(2) Package installation](#2-package-installation)
+    - [(3) Supabase Connection Setup](#3-supabase-connection-setup)
+    - [(4) Supabase Database Setup](#4-supabase-database-setup)
+    - [(5) Supabase + Google Authentication Setup](#5-supabase--google-authentication-setup)
+      - [User auth workflow + security explained](#user-auth-workflow--security-explained)
+    - [(6) Supabase CLI Setup](#6-supabase-cli-setup)
+    - [(7) Run the webapp](#7-run-the-webapp)
+    - [(8) (Recommended) Configure git message template](#8-recommended-configure-git-message-template)
+    - [(9) Github CI workflow (for SSWEs, do during project setup)](#9-github-ci-workflow-for-sswes-do-during-project-setup)
+  - [File walkthrough](#file-walkthrough)
+    - [`app/`](#app)
+    - [`components/`](#components)
+    - [`lib/`](#lib)
+    - [Configuration Files & More](#configuration-files--more)
+    - [Files to Alter for Specific Purposes](#files-to-alter-for-specific-purposes)
   - [Stack references](#stack-references)
     - [Typescript](#typescript)
     - [Components and Styling: `shadcn/ui`, Radix, and Tailwind CSS](#components-and-styling-shadcnui-radix-and-tailwind-css)
     - [Next.js](#nextjs)
       - [Tips for learning:](#tips-for-learning)
     - [Supabase](#supabase)
-        - [Troubleshooting the Supabase CLI](#troubleshooting-the-supabase-cli)
+      - [Troubleshooting the Supabase CLI](#troubleshooting-the-supabase-cli)
     - [Environment variables](#environment-variables)
   - [Development tools](#development-tools)
     - [Code formatting and linting tools](#code-formatting-and-linting-tools)
@@ -86,10 +92,10 @@ git clone git@github.com:hcs-t4sg/starter-project-2023-v2.git
 
   ```bash
   added 414 packages, and audited 415 packages in 13s
-  
+
   149 packages are looking for funding
   run `npm fund` for details
-  
+
   found 0 vulnerabilities
   ```
 
@@ -209,6 +215,93 @@ We implemented a [Github Actions](https://docs.github.com/en/actions) workflow f
    - Require status checks to pass before merging
      - Require branches to be up to date before merging
      - **Required status checks: "Format source code and check for linting errors"** (important to get our CI workflow to run!)
+
+---
+
+## File walkthrough
+
+#### `app/`
+
+This folder contains main application code, including pages, some components, and route handlers.
+
+- `(components-navbar)`
+
+  The `(components-navbar)` folder contains components related to the navigation bar, including user authentication status, login functionality, and theme toggling.
+
+  - `auth-status.tsx`: Checks the user's authentication status using Supabase, and either displays the `UserNav` component or the `LoginButton` component.
+  - `login-button.tsx`: Provides a button for users to login using Google OAuth and handles the sign-in process.
+  - `mode-toggle.tsx`: Provides a dropdown menu component that allows users to toggle between light, dark, and system themes.
+  - `navbar.tsx`: Renders the main navigation bar of the application. It includes links to the various pages of the application. To add a new 'tab' to the navbar, the developer must edit this file.
+  - `user-nav.tsx`: Displays a dropdown menu with user-specific options such as viewing the profile, accessing settings, and logging out.
+
+- `auth/callback`
+
+  The `auth/callback` folder contains the `route.ts` file, which handles the callback from Supabase authentication. Its primary function is to process the authentication code received from Supabase, exchange it for a session, and set the session cookies. If the authentication is successful, it redirects the user to the specified next URL; otherwise, it redirects to an error page.
+
+- `dashboard`
+
+  The `dashboard` folder contains the `page.tsx` file, which renders the dashboard page. This page is a protected route, so it is only accessible to authenticated users. This folder provides a template for how to create new authenticated pages for the developer's project.
+
+- `settings`
+
+  The `settings` folder contains components and pages related to user settings and profile management. It provides a basic template for the developer to allow users to edit both general and profile settings.
+
+  - `general/page.tsx`: Renders the general settings page. Edit this file to allow users to edit general settings.
+  - `profile`:
+    - `page.tsx`: Renders the profile settings page for authenticated users, using the `ProfileForm` component.
+    - `profile-form.tsx`: A client component that provides a form for users to update their profile information.
+  - `layout.tsx`: Defines the layout for the settings pages. It ensures that only authenticated users can access the settings and provides a consistent structure for the settings pages, including a sidebar navigation.
+  - `page.tsx`: Redirects users to the general settings page when they navigate to the `/settings` route.
+
+- Other files
+  - `layout.tsx`: Defines the root layout for the entire application, including a navigation bar and main content area.
+  - `page.tsx`: Serves as the home page of the application, and is rendered when the user navigates to the root URL (`/`).
+  - `not-found.tsx` and `loading.tsx`: These are the fallback pages for the application, and are rendered when the user navigates to a page that does not exist or when the page is loading.
+  - `providers.tsx`: Sets up the context providers for the application.
+  - `globals.css`: Defines the global styles for the application.
+
+#### `components/`
+
+This folder contains components that are used across multiple pages of the application. The developer may add components to this folder as needed throughout a project, or use the existing built-in components.
+
+- `global/`: Houses reusable, typically more general-purpose components that are used across multiple pages or sections of the application.
+- `ui/`: Houses reusable UI components that are specific to the user interface and styling of the application. Some of the built-in components include a button, typography, and form elements.
+
+#### `lib/`
+
+This folder contains utility functions and type definitions that facilitate both client-side and server-side operations within the application. The developer may need to edit or use this folder when interacting with Supabase, managing environment variables, updating type definitions, or utilizing general utility functions for both client-side and server-side operations.
+
+- `client-utils.ts`: Contains utility functions that are intended to be used exclusively in client-side components. The primary function provided in this file creates a Supabase client configured for use in the browser.
+- `reset.d.ts`: Enables the `ts-reset` package, which enhances TypeScript's type-checking capabilities.
+- `schema.ts`: Contains TypeScript type definitions that correspond to the database schema. The developer should update this file as the database schema changes, to ensure that database operations are type-checked.
+- `server-utils.ts`: Contains utility functions that are intended to be used exclusively in server-side components. The primary functions provided in this file include creating a Supabase client configured for server-side operations and managing cookies for authentication.
+- `utils.ts`: Contains general utility functions that can be used in both server and client components. The functions provided include one for conditionally merging Tailwind CSS classes, one for pausing execution for debugging purposes, and one for retrieving user profiles from Supabase.
+
+#### Configuration Files & More
+
+The rest of the repository includes configuration and other files that collectively ensure that the project maintains high code quality, consistent styling, and secure environment variable management, while also providing necessary configurations for development and production environments.
+
+- `.env`: Stores environment variables that configure various aspects of the application, such as Supabase connection.
+- `env.mjs`: Validates and provides type safety for environment variables.
+- `.gitignore`: Specifies which files and directories should be ignored by Git.
+- `package.json`, `package-lock.json`: Defines the project's metadata, dependencies, scripts, and other configurations.
+- `next.config.js`: Configures various settings for the Next.js application.
+- `setup.sql`: Contains SQL code to set up the database schema and initial data.
+- `middleware.ts`: Defines middleware functions that run before requests are completed.
+- `components.json`: Configures the `shadcn/ui` library.
+- `eslintrc.cjs`, `prettierrc.cjs`, `postcss.config.cjs`, `tailwind.config.ts`, `tsconfig.json`: Configures ESLint, Prettier, PostCSS, Tailwind CSS, and TypeScript, respectively, to enforce code quality, formatting, and type safety.
+
+#### Files to Alter for Specific Purposes
+
+- **Adding new pages or routes**: Create new files in the `app/` directory. To create a new route, create a new folder in the `app/` directory and add a `page.tsx` file. The route of the new page is the name of the folder. For example, if you create a `my-page` folder, the route of the page is `/my-page`.
+
+- **Adding new components**: Create new files in the `components/` directory. For UI-specific components, create a new file in the `components/ui` directory.
+
+- **Updating environment variables**: Modify the `.env` file and update `env.mjs` to reflect the new environment variables.
+
+- **Updating styles**: Modify `tailwind.config.ts` and `app/globals.css` to update the styles of the webapp.
+
+- **Updating utility functions**: Modify or add new functions in `lib` to update the utility functions.
 
 ---
 
